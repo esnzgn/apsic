@@ -17,10 +17,23 @@ shinyServer(function(input, output){
   
   
   output$rank <- renderText(input$rank)
-  output$wf0plot <- renderPlot (
+  output$wf0plot <- renderPlot ( {
+    if(input$cancer == "Pan cancer") {
+    selectedData = cancerData
     
-    waterfallForGene(cancerData, gene = input$gene, title=input$gene, rank=TRUE, legenedPos="bottomleft", 
-                     cols=NULL, type = input$filter, sig_alpha = NA))
+  } else {
+    selectedData = selectCelllines(cancerData, input$cancer)
+  }
+    
+    if(input$filter == "mutation") {
+      waterfallForGene(selectedData, gene = input$gene, title=input$gene, rank=TRUE, legenedPos="bottomleft",
+                       cols=NULL, type = "all", sig_alpha = NA)
+    } else if (input$filter == "CNA") {
+      waterfallForGene_CNA(selectedData, gene = input$gene, title=input$gene, rank=TRUE, legenedPos="bottomleft",
+                           cols=NULL, type = "all", sig_alpha = NA)
+    }
+  }
+  )
   
   output$wfplot <- renderPlot ( {
     # load tcga data

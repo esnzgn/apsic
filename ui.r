@@ -8,7 +8,7 @@ shinyUI(fluidPage(
                  selectInput("cancer", "Please select cancer type", choices = c("Pan cancer", cancer_types)),
                  radioButtons("filter", label = "Select the filter", 
                               choiceNames  = list("Mutation", "Copy number"), 
-                              choiceValues = list("all", "all"))),
+                              choiceValues = list("mutation", "CNA"))),
     
     mainPanel(("Gene/Cancer chart Information"),
               

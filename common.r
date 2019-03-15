@@ -23,7 +23,7 @@ getCancerTypes <- function() {
 
 # selectCelllines <- function(panCancerData, text, filter=NA) {
 selectCelllines <- function(panCancerData, patho_annot) {
-  CellLine_annot <-  read.csv("Data/ProjectDRIVE/TableS2.csv",stringsAsFactors = F)
+  CellLine_annot <-  read.csv("TableS2.csv",stringsAsFactors = F)
   CellLine_annot = CellLine_annot[CellLine_annot$PATHOLOGIST_ANNOTATION == patho_annot, , drop=FALSE]
   
   if(nrow(CellLine_annot) == 0 ) {
@@ -58,8 +58,8 @@ selectCelllines <- function(panCancerData, patho_annot) {
 boxplot_gene <- function(tcga_data, gene) {
   gene_index = which(rownames(tcga_data$normal_counts)== gene) 
   
-  tumor_cpm = cpm(tcga_data$tumor_counts)
-  normal_cpm = cpm(tcga_data$normal_counts)
+  tumor_cpm = tcga_data$tumor_counts
+  normal_cpm = tcga_data$normal_counts
   
   N = normal_cpm[gene_index, ] + 1
   T = tumor_cpm[gene_index, ] + 1
