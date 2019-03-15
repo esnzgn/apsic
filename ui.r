@@ -1,4 +1,3 @@
-library(shiny)
 
 shinyUI(fluidPage(
   titlePanel("APSiC Data Portal"),

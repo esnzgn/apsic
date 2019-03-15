@@ -1,11 +1,3 @@
-rm(list=ls())
-library(shiny)
-source("waterfall_plot_methods.r")
-source("common.r")
-folder = ""
-load(paste0(folder, "cancerData.RData"))
-
-
 
 shinyServer(function(input, output){
   output$GS <- renderText(input$gene)
