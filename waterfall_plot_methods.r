@@ -34,7 +34,8 @@ waterfallForGene <- function(panCancerData, gene, title, rank, legenedPos="botto
   mut_tmp[ which(panCancerData$silentMutations[gene, ] == 1) ] = 2
   mut_tmp[ which(panCancerData$missenseMutations[gene, ] == 1) ] = 3
   mut_tmp[ which(panCancerData$truncatingMutations[gene, ] == 1) ] = 4
-  
+
+    
   if(rank == TRUE){
     allRanks = apply(panCancerData$viabilities, 2, rank) / nrow(panCancerData$viabilities) - 0.5
     via_tmp = as.numeric(allRanks[gene,])
@@ -116,10 +117,10 @@ waterfallForGene <- function(panCancerData, gene, title, rank, legenedPos="botto
 waterfallForGene_CNA <- function(panCancerData, gene, title, rank, legenedPos="bottomleft", cols=NULL, type="all",
                                  sig_alpha = NA, cex.axis=1.1) {
   cna_tmp = rep(1, ncol(panCancerData$copyNumbers))
-  cna_tmp[ panCancerData$copyNumbers[gene,] < 1 ] = 2
-  cna_tmp[ panCancerData$copyNumbers[gene,] == 1 ] = 3
-  cna_tmp[ panCancerData$copyNumbers[gene,] == 3 ] = 4
-  cna_tmp[ panCancerData$copyNumbers[gene,] > 3 ] = 5
+  cna_tmp[ panCancerData$copyNumbers[gene,] == -2 ] = 2
+  cna_tmp[ panCancerData$copyNumbers[gene,] == -1 ] = 3
+  cna_tmp[ panCancerData$copyNumbers[gene,] == 1 ] = 4
+  cna_tmp[ panCancerData$copyNumbers[gene,] == 2 ] = 5
   
   
   if(rank == TRUE){
