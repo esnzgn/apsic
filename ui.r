@@ -1,4 +1,3 @@
-
 shinyUI(fluidPage(
   titlePanel("APSiC Data Portal"),
   sidebarLayout(
@@ -12,8 +11,10 @@ shinyUI(fluidPage(
     mainPanel(("Gene/Cancer chart Information"),
               
               h5("p-values amplification-low:0.01"),h5("p-values missense-low:0.01"),h5("p-values genetic-high:0.01"),h5("p-values genetic-low:0.01"), h5("p-values truncating-high:0.01"),
-              plotOutput("wfplot"),
-              plotOutput("wf0plot")
+              plotOutput("barChart"),
+              plotOutput("wfplot_Mut_CNV"),
+              plotOutput("wfplot_only_mut"),
+              plotOutput("wfplot_only_wt")
               
               
     )
