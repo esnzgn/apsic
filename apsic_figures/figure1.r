@@ -1,7 +1,10 @@
 rm(list=ls())
 library(ggplot2)
+library(reshape2)
+library(viridis)
 source("../apsic_shiny/common.r")
 source("../apsic_shiny/waterfall_plot_methods.r")
+source("generate_mutation_profile.r")
 
 # load viability data
 load("../apsic_shiny/cancerData.RData")
@@ -77,3 +80,12 @@ pdf(paste0(fig_folder,"fig-1-e-non-genetic-tcga.pdf"), 5, 4)
 load("../apsic_shiny/tcga/TCGA-BRCA.RData")
 boxplot_gene(tcga_data, "PARP4")
 dev.off()
+
+# plot mutation profile
+pdf(paste0(fig_folder,"fig-1-mut-profile.pdf"), 10, 6)
+indexes = tail(order(apply(selectedData$mutations_all, 1, sum)), n=100)
+plotDriverGenes(selectedData$mutations_all[indexes, 1:20]) 
+dev.off()
+
+
+
