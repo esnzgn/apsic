@@ -22,8 +22,6 @@ shinyUI(fluidPage(
               h5("p-value wild type Bladder Carcinoma truncating-high"),
               textOutput("p_wt_bladder_trun_hi"),
               
-              
-              
               plotOutput("barChart"),
               plotOutput("wfplot_Mut_CNV"),
               plotOutput("wfplot_only_mut"),
