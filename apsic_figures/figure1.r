@@ -4,7 +4,7 @@ library(reshape2)
 library(viridis)
 source("../apsic_shiny/common.r")
 source("../apsic_shiny/waterfall_plot_methods.r")
-source("generate_mutation_profile.r")
+source("plot_functions_for_profiles.r")
 
 # load viability data
 load("../apsic_shiny/cancerData.RData")
@@ -85,6 +85,16 @@ dev.off()
 pdf(paste0(fig_folder,"fig-1-mut-profile.pdf"), 10, 6)
 indexes = tail(order(apply(selectedData$mutations_all, 1, sum)), n=100)
 plotDriverGenes(selectedData$mutations_all[indexes, 1:20]) 
+dev.off()
+
+
+
+# plot perturbation profile
+n = nrow(selectedData$viabilities)
+perturbData = as.matrix(selectedData$viabilities[sample(n, 100), ])
+
+pdf(paste0(fig_folder,"fig-1-perturb-profile.pdf"), 10, 6)
+plotPerturbationProfile(perturbData)
 dev.off()
 
 
