@@ -10,11 +10,26 @@ shinyUI(fluidPage(
     
     mainPanel(("Gene/Cancer chart Information"),
               
-              h5("p-values amplification-low:0.01"),h5("p-values missense-low:0.01"),h5("p-values genetic-high:0.01"),h5("p-values genetic-low:0.01"), h5("p-values truncating-high:0.01"),
+              h4("P-Values"),
+              h5("p-value wild type Bladder Carcinoma amplification-low"),
+              textOutput("p_wt_bladder_amp_low"),
+              h5("p-value wild type Bladder Carcinoma missense-low"),
+              textOutput("p_wt_bladder_mis_low"),
+              h5("p-value wild type Bladder Carcinoma non-genetic-high"),
+              textOutput("p_wt_bladder_non_gen_hi"),
+              h5("p-value wild type Bladder Carcinoma non-genetic-low"),
+              textOutput("p_wt_bladder_non_gen_low"),
+              h5("p-value wild type Bladder Carcinoma truncating-high"),
+              textOutput("p_wt_bladder_trun_hi"),
+              
+              
+              
               plotOutput("barChart"),
               plotOutput("wfplot_Mut_CNV"),
               plotOutput("wfplot_only_mut"),
               plotOutput("wfplot_only_wt")
+              
+            
               
               
     )

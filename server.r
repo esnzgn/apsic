@@ -79,6 +79,38 @@ shinyServer(function(input, output){
   }
   )
   
+  #p_values
+  output$p_wt_bladder_amp_low <- renderText ({
+    dat = read.csv("apsic_pvalues/Bladder_Carcinoma/Bladder_Carcinoma-amplification-low.csv", row.names = 1)
+    dat[input$gene, "pvalue_wt"]
+  
+  })
+  
+  output$p_wt_bladder_mis_low <- renderText ({
+    dat = read.csv("apsic_pvalues/Bladder_Carcinoma/Bladder_Carcinoma-missense-low.csv", row.names = 1)
+    dat[input$gene, "pvalue_wt"]
+    
+  })
+  
+  output$p_wt_bladder_non_gen_hi <- renderText ({
+    dat = read.csv("apsic_pvalues/Bladder_Carcinoma/Bladder_Carcinoma-non-genetic-high.csv", row.names = 1)
+    dat[input$gene, "pvalue_wt"]
+    
+  })
+  
+  output$p_wt_bladder_non_gen_low <- renderText ({
+    dat = read.csv("apsic_pvalues/Bladder_Carcinoma/Bladder_Carcinoma-non-genetic-low.csv", row.names = 1)
+    dat[input$gene, "pvalue_wt"]
+    
+  })
+  
+  output$p_wt_bladder_trun_hi <- renderText ({
+    dat = read.csv("apsic_pvalues/Bladder_Carcinoma/Bladder_Carcinoma-truncating-high.csv", row.names = 1)
+    dat[input$gene, "pvalue_wt"]
+    
+  })
+  
+  
   
 }
 
