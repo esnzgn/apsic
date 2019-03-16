@@ -134,6 +134,27 @@ waterfallForGene_CNA <- function(panCancerData, gene, title, rank, legenedPos="b
   via = via_tmp[order(via_tmp, decreasing=TRUE)]
   cna = cna_tmp[order(via_tmp, decreasing=TRUE)]
   
+  
+  if(type == "only_wt") {
+    indexes = which(cna==1)  # 1 means wt
+    via = via[indexes]
+    cna = cna[indexes]
+    if(length(indexes) == 0) {
+      warnings("no observation!")
+      return(NULL)
+    }
+    
+  } else if(type == "only_cna") {
+    indexes = which(cna!=1) # !=1 (i.e. 2, 3, 4, 5) means with CNA
+    if(length(indexes) == 0) {
+      warning("no observation!")
+      return(NULL)
+    }
+    cna = cna[indexes]
+    via = via[indexes]
+  }
+  
+  
   wfSettings = getWaterfallSettings("cna",cols=cols)
   col = wfSettings$colors[cna]
   

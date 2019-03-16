@@ -39,7 +39,7 @@ shinyServer(function(input, output){
                        cols=NULL, type = "only_mut", sig_alpha = NA)
     } else if (input$filter == "CNA") {
       waterfallForGene_CNA(selectedData, gene = input$gene, title=input$gene, rank=TRUE, legenedPos="bottomleft",
-                           cols=NULL, type = "only_mut", sig_alpha = NA)
+                           cols=NULL, type = "only_cna", sig_alpha = NA)
     }
   }
   )
