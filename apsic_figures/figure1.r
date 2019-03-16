@@ -83,7 +83,7 @@ dev.off()
 
 # plot mutation profile
 pdf(paste0(fig_folder,"fig-1-mut-profile.pdf"), 10, 6)
-indexes = tail(order(apply(selectedData$mutations_all, 1, sum)), n=100)
+indexes = tail(order(apply(selectedData$mutations_all, 1, sum)), n=40)
 plotDriverGenes(selectedData$mutations_all[indexes, 1:20]) 
 dev.off()
 

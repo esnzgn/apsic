@@ -15,7 +15,7 @@ plotDriverGenes <- function(MutMat) {
           axis.title.x=element_text(angle=0, size=13, face="bold",vjust=1,colour="#525252"),
           axis.title.y=element_text(angle=90, size=13, face="bold",vjust=0,colour="#525252"),
           legend.position = "none")+
-    scale_fill_gradient(low="white",high="red")
+    scale_fill_gradient(low="white",high="blue")
 }
 
 
