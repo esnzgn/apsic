@@ -1,4 +1,5 @@
 rm(list=ls())
+library(ggplot2)
 source("../apsic_shiny/common.r")
 source("../apsic_shiny/waterfall_plot_methods.r")
 
@@ -67,12 +68,12 @@ dev.off()
 
 selectedData = selectCelllines(cancerData, "Breast:Carcinoma", tableS2File="../apsic_shiny/TableS2.csv")
 gene = "NR3C2"
-pdf(paste0(fig_folder,"fig-1-non-genetic-wt.pdf"), 5, 4)
+pdf(paste0(fig_folder,"fig-1-e-non-genetic-wt.pdf"), 5, 4)
 waterfallForGene(selectedData, gene = gene, title="", rank=TRUE, legenedPos="bottomleft", 
                  cols=NULL, type="only_wt", sig_alpha = NA)
 dev.off()
 
-
-
-PARP4
-
+pdf(paste0(fig_folder,"fig-1-e-non-genetic-tcga.pdf"), 5, 4)
+load("../apsic_shiny/tcga/TCGA-BRCA.RData")
+boxplot_gene(tcga_data, "PARP4")
+dev.off()
