@@ -80,7 +80,7 @@ shinyServer(function(input, output){
   )
   
   #p_values
-  output$p_wt_bladder_amp_low <- renderText ({
+  output$p_wt_cancer_amp_low <- renderText ({
     tmp = str_replace(input$cancer, "[: ]", "_")
     A <- paste0("apsic_pvalues/", tmp,"/", tmp, "-amplification-low.csv")
     dat = read.csv(A, row.names = 1)
@@ -88,29 +88,51 @@ shinyServer(function(input, output){
   
   })
   
-  output$p_wt_bladder_mis_low <- renderText ({
-    dat = read.csv("apsic_pvalues/Bladder_Carcinoma/Bladder_Carcinoma-missense-low.csv", row.names = 1)
+  output$p_wt_cancer_mis_low <- renderText ({
+    tmp = str_replace(input$cancer, "[: ]", "_")
+    A <- paste0("apsic_pvalues/", tmp,"/", tmp, "-missense-low.csv")
+    dat = read.csv(A, row.names = 1)
     dat[input$gene, "pvalue_wt"]
     
   })
   
-  output$p_wt_bladder_non_gen_hi <- renderText ({
-    dat = read.csv("apsic_pvalues/Bladder_Carcinoma/Bladder_Carcinoma-non-genetic-high.csv", row.names = 1)
+  output$p_wt_cancer_non_gen_hi <- renderText ({
+    tmp = str_replace(input$cancer, "[: ]", "_")
+    A <- paste0("apsic_pvalues/", tmp,"/", tmp, "-non-genetic-high.csv")
+    dat = read.csv(A, row.names = 1)
     dat[input$gene, "pvalue_wt"]
     
   })
   
-  output$p_wt_bladder_non_gen_low <- renderText ({
-    dat = read.csv("apsic_pvalues/Bladder_Carcinoma/Bladder_Carcinoma-non-genetic-low.csv", row.names = 1)
+  output$p_wt_cancer_non_gen_low <- renderText ({
+    tmp = str_replace(input$cancer, "[: ]", "_")
+    A <- paste0("apsic_pvalues/", tmp,"/", tmp, "-non-genetic-low.csv")
+    dat = read.csv(A, row.names = 1)
     dat[input$gene, "pvalue_wt"]
     
   })
   
-  output$p_wt_bladder_trun_hi <- renderText ({
-    dat = read.csv("apsic_pvalues/Bladder_Carcinoma/Bladder_Carcinoma-truncating-high.csv", row.names = 1)
+  
+  output$p_wt_cancer_trun_hi <- renderText ({
+    tmp = str_replace(input$cancer, "[: ]", "_")
+    A <- paste0("apsic_pvalues/", tmp,"/", tmp, "-truncating-high.csv")
+    dat = read.csv(A, row.names = 1)
     dat[input$gene, "pvalue_wt"]
     
   })
+  
+  output$p_TCGA <- renderText ({
+    cancer_type = input$cancer
+    cancerToTCGA_data = read.csv("CelllinesToTumorTypes.csv", stringsAsFactors = FALSE)
+    rownames(cancerToTCGA_data) = cancerToTCGA_data$Celllines
+    tmp = cancerToTCGA_data[cancer_type, "mappedTCGAFile"]
+    if(is.na(tmp) == FALSE) {
+      load(paste0("tcga/", tmp, ".RData"))
+      return(tcga_data$pvalues[input$gene, 1])
+    }
+  })
+  
+
   
   
   
