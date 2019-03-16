@@ -81,7 +81,9 @@ shinyServer(function(input, output){
   
   #p_values
   output$p_wt_bladder_amp_low <- renderText ({
-    dat = read.csv("apsic_pvalues/Bladder_Carcinoma/Bladder_Carcinoma-amplification-low.csv", row.names = 1)
+    tmp = str_replace(input$cancer, "[: ]", "_")
+    A <- paste0("apsic_pvalues/", tmp,"/", tmp, "-amplification-low.csv")
+    dat = read.csv(A, row.names = 1)
     dat[input$gene, "pvalue_wt"]
   
   })
