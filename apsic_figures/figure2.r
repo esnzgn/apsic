@@ -11,6 +11,11 @@ prepareData <-function() {
 }
 
   
-plotHeatmap function <- (data) {
+plotHeatmap <- function(data) {
+  # heat
   
 }
+
+
+fakeData = prepareData()
+plotHeatmap(fakeData)
