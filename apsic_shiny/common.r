@@ -22,8 +22,8 @@ getCancerTypes <- function() {
 
 
 # selectCelllines <- function(panCancerData, text, filter=NA) {
-selectCelllines <- function(panCancerData, patho_annot) {
-  CellLine_annot <-  read.csv("TableS2.csv",stringsAsFactors = F)
+selectCelllines <- function(panCancerData, patho_annot, tableS2File="TableS2.csv") {
+  CellLine_annot <-  read.csv(tableS2File,stringsAsFactors = F)
   CellLine_annot = CellLine_annot[CellLine_annot$PATHOLOGIST_ANNOTATION == patho_annot, , drop=FALSE]
   
   if(nrow(CellLine_annot) == 0 ) {

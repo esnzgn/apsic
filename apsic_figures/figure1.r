@@ -63,3 +63,16 @@ pdf(paste0(fig_folder,"fig-1-d_missense_tp53.pdf"), 5, 4)
 waterfallForGene(cancerData, gene = gene, title="", rank=TRUE, legenedPos="bottomleft", 
                  cols=NULL, type="only_missense", sig_alpha = NA)
 dev.off()
+
+
+selectedData = selectCelllines(cancerData, "Breast:Carcinoma", tableS2File="../apsic_shiny/TableS2.csv")
+gene = "NR3C2"
+pdf(paste0(fig_folder,"fig-1-non-genetic-wt.pdf"), 5, 4)
+waterfallForGene(selectedData, gene = gene, title="", rank=TRUE, legenedPos="bottomleft", 
+                 cols=NULL, type="only_wt", sig_alpha = NA)
+dev.off()
+
+
+
+PARP4
+
