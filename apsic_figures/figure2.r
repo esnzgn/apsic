@@ -24,7 +24,7 @@ dat = prepareData(20, 20)
 
 # dat = matrix(rnorm(50*17),50,17)
 # heatmap(dat)
-dev.off()
+# dev.off()
 
 # pheatmap(dat, cluster_rows = FALSE,cluster_cols = FALSE)
 pheatmap(dat, cluster_rows = FALSE,cluster_cols = FALSE,
