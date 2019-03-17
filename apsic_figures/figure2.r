@@ -27,6 +27,20 @@ dat = prepareData(20, 20)
 # dev.off()
 
 # pheatmap(dat, cluster_rows = FALSE,cluster_cols = FALSE)
+# 
+# pheatmap(dat, cluster_rows = FALSE,cluster_cols = FALSE,
+#          color = colorRampPalette(c("white","yellow2"))(10), 
+#          border_color = TRUE)
+# 
+# pheatmap(dat, cluster_rows = FALSE,cluster_cols = FALSE,
+#          color = colorRampPalette(c("white","yellow2"))(10), 
+#          border_color = "yellow2")
+# 
+# pheatmap(dat, cluster_rows = FALSE,cluster_cols = FALSE,
+#         color = colorRampPalette(c("white","yellow2"))(10), 
+#         border_color = "white")
+
 pheatmap(dat, cluster_rows = FALSE,cluster_cols = FALSE,
-        color = colorRampPalette(c("black","firebrick3","white"))(10), 
-        display_numbers = matrix(ifelse(dat > 0.8, "*", ""), nrow(dat)), border_color = FALSE)
+         color = colorRampPalette(c("white", "red"))(10), 
+         border_color = FALSE, display_numbers = matrix(ifelse(dat > 0.95, "5%", ""), nrow(dat)),
+         legend = TRUE, angle_col = "45")
