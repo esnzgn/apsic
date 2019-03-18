@@ -49,7 +49,7 @@ plotInChromosomeContext <- function(candidGenes, geneAnnot, plot_title) {
   kpPlotMarkers(kp, data=genes[ids, ], labels=tmp_genes, r1 = 0.6, cex=0.65, text.orientation = "horizontal", data.panel = 2, label.color=colors2)
   legend("bottomright", legend=c("Oncogene mutation", "Oncogene amplification", "Tumor suppressor mutation",
                                  "Non-genetic oncogene", "Non-genetic tumor suppressor"), 
-         col=c("orange", "green", "purple","red", "blue"), cex=0.7, lty=1)
+         col=c("orange", "green", "purple", "blue", "red"), cex=1, lty=1)
 }
 
 
@@ -113,7 +113,7 @@ geneAnnot = read.table("Homo_sapiens.GRCh38.p10_genes.csv", sep='\t', stringsAsF
 cancer_type = "Breast_Carcinoma"
 # cancer_type = "Liver_HCC"
 candidGenes = candidateGenes(cancer_type)
-# plotInChromosomeContext(candidGenes, geneAnnot, cancer_type)
+plotInChromosomeContext(candidGenes, geneAnnot, cancer_type)
 
 
 output_folder =  "figures/fig3/"
@@ -123,14 +123,14 @@ file_names = list.files("../apsic_shiny/apsic_pvalues/")
 for(fname in file_names)
 {
   candidGenes = candidateGenes(fname)
-  pdf(paste0(output_folder, fname, ".pdf"), 14, 20)
+  pdf(paste0(output_folder, fname, ".pdf"), 10, 15)
   plotInChromosomeContext(candidGenes, geneAnnot, fname)
   dev.off()
 }
 
 
 
-pdf(paste0(output_folder, "All_cancers", ".pdf"), 14, 20,  onefile=TRUE)
+pdf(paste0(output_folder, "All_cancers", ".pdf"), 10, 15,  onefile=TRUE)
 for(fname in file_names) {
   candidGenes = candidateGenes(fname)
   plotInChromosomeContext(candidGenes, geneAnnot, fname)
