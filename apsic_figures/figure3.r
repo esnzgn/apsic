@@ -3,7 +3,7 @@ rm(list=ls())
 library(karyoploteR)
 
 
-plotInChromosomeContext <- function(candidGenes, geneAnnot) {
+plotInChromosomeContext <- function(candidGenes, geneAnnot, plot_title) {
   # TODO solve duplicated genes
   
   colors = c(rep("red", length(candidGenes$nongen_low)) , rep("blue", length(candidGenes$nongen_high)), 
@@ -32,7 +32,7 @@ plotInChromosomeContext <- function(candidGenes, geneAnnot) {
   u_chros = allChromo[which(allChromo %in% char_element)]
   
 
-  kp <- plotKaryotype(genome="hg38", plot.type = 2, chromosomes=paste0("chr",u_chros) )
+  kp <- plotKaryotype(genome="hg38", plot.type = 2, chromosomes=paste0("chr",u_chros), main= plot_title )
 
   n = length(genes@seqnames)
   
@@ -120,6 +120,16 @@ for(fname in file_names)
 {
   candidGenes = candidateGenes(fname)
   pdf(paste0(output_folder, fname, ".pdf"), 14, 20)
-  plotInChromosomeContext(candidGenes, geneAnnot)
+  plotInChromosomeContext(candidGenes, geneAnnot, fname)
   dev.off()
 }
+
+
+
+pdf(paste0(output_folder, "All_cancers", ".pdf"), 14, 20,  onefile=TRUE)
+for(fname in file_names) {
+  candidGenes = candidateGenes(fname)
+  plotInChromosomeContext(candidGenes, geneAnnot, fname)
+}
+
+dev.off()
