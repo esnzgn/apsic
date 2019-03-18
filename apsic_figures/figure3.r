@@ -3,11 +3,11 @@ rm(list=ls())
 library(karyoploteR)
 
 
-plotInChromosomeContext <- function(candidGenes, geneAnnot, plot_title) {
+plotInChromosomeContext <- function(candidGenes, geneAnnot) {
   # TODO solve duplicated genes
   
   colors = c(rep("red", length(candidGenes$nongen_low)) , rep("blue", length(candidGenes$nongen_high)), 
-             rep("yellow", length(candidGenes$gen_missense)), rep("green", length(candidGenes$gen_amplification)),
+             rep("orange", length(candidGenes$gen_missense)), rep("green", length(candidGenes$gen_amplification)),
              rep("purple", length(candidGenes$gen_truncating)))
   
   
@@ -32,7 +32,7 @@ plotInChromosomeContext <- function(candidGenes, geneAnnot, plot_title) {
   u_chros = allChromo[which(allChromo %in% char_element)]
   
 
-  kp <- plotKaryotype(genome="hg38", plot.type = 2, chromosomes=paste0("chr",u_chros), main= plot_title )
+  kp <- plotKaryotype(genome="hg38", plot.type = 2, chromosomes=paste0("chr",u_chros) )
 
   n = length(genes@seqnames)
   
@@ -107,10 +107,10 @@ candidateGenes  <- function(cancer_type ) {
 
 geneAnnot = read.table("Homo_sapiens.GRCh38.p10_genes.csv", sep='\t', stringsAsFactors = FALSE)
 
-cancer_type = "Breast_Carcinoma"
-# cancer_type = "Liver_HCC"
-candidGenes = candidateGenes(cancer_type)
-plotInChromosomeContext(candidGenes, geneAnnot, cancer_type)
+# cancer_type = "Breast_Carcinoma"
+# # cancer_type = "Liver_HCC"
+# candidGenes = candidateGenes(cancer_type)
+# 
 
 output_folder =  "figures/fig3/"
 dir.create(output_folder, showWarnings = FALSE, recursive = TRUE)
@@ -119,15 +119,7 @@ file_names = list.files("../apsic_shiny/apsic_pvalues/")
 for(fname in file_names)
 {
   candidGenes = candidateGenes(fname)
-  pdf(paste0(output_folder, fname, ".pdf"), 14, 10)
-  plotInChromosomeContext(candidGenes, geneAnnot, fname)
+  pdf(paste0(output_folder, fname, ".pdf"), 14, 20)
+  plotInChromosomeContext(candidGenes, geneAnnot)
   dev.off()
 }
-
-pdf(paste0(output_folder, "All_cancers", ".pdf"), 14, 10,  onefile=TRUE)
-for(fname in file_names) {
-  candidGenes = candidateGenes(fname)
-  plotInChromosomeContext(candidGenes, geneAnnot, fname)
-}
-
-dev.off()
