@@ -47,6 +47,9 @@ plotInChromosomeContext <- function(candidGenes, geneAnnot, plot_title) {
   tmp_genes = sapply(genes$gene_name[ids], toString)
   colors2 = colors[tmp_genes]
   kpPlotMarkers(kp, data=genes[ids, ], labels=tmp_genes, r1 = 0.6, cex=0.65, text.orientation = "horizontal", data.panel = 2, label.color=colors2)
+  legend("bottomright", legend=c("Oncogene mutation", "Oncogene amplification", "Tumor suppressor mutation",
+                                 "Non-genetic oncogene", "Non-genetic tumor suppressor"), 
+         col=c("orange", "green", "purple","red", "blue"), cex=0.7, lty=1)
 }
 
 
@@ -107,10 +110,11 @@ candidateGenes  <- function(cancer_type ) {
 
 geneAnnot = read.table("Homo_sapiens.GRCh38.p10_genes.csv", sep='\t', stringsAsFactors = FALSE)
 
-# cancer_type = "Breast_Carcinoma"
-# # cancer_type = "Liver_HCC"
-# candidGenes = candidateGenes(cancer_type)
-# 
+cancer_type = "Breast_Carcinoma"
+# cancer_type = "Liver_HCC"
+candidGenes = candidateGenes(cancer_type)
+# plotInChromosomeContext(candidGenes, geneAnnot, cancer_type)
+
 
 output_folder =  "figures/fig3/"
 dir.create(output_folder, showWarnings = FALSE, recursive = TRUE)
