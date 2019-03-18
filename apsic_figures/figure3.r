@@ -7,7 +7,7 @@ plotInChromosomeContext <- function(candidGenes, geneAnnot, cancerName) {
   # TODO solve duplicated genes
   
   colors = c(rep("red", length(candidGenes$nongen_low)) , rep("blue", length(candidGenes$nongen_high)), 
-             rep("yellow", length(candidGenes$gen_missense)), rep("green", length(candidGenes$gen_amplification)),
+             rep("orange", length(candidGenes$gen_missense)), rep("green", length(candidGenes$gen_amplification)),
              rep("purple", length(candidGenes$gen_truncating)))
   
   
