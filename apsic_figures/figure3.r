@@ -38,12 +38,15 @@ plotInChromosomeContext <- function(candidGenes, geneAnnot) {
   
   
   ids = seq(2, length(genes), by=2)
-  colors2 = colors[genes$gene_name[ids]]
-  kpPlotMarkers(kp, data=genes[ids, ], labels=genes$gene_name[ids], r1 = 0.6, cex=0.65, text.orientation = "horizontal", data.panel = 1, label.color=colors2)
+  
+  tmp_genes = sapply(genes$gene_name[ids], toString)
+  
+  colors2 = colors[tmp_genes]
+  kpPlotMarkers(kp, data=genes[ids, ], labels=tmp_genes, r1 = 0.6, cex=0.65, text.orientation = "horizontal", data.panel = 1, label.color=colors2)
   
   ids = seq(1, length(genes), by=2)
-  colors2 = colors[genes$gene_name[ids]]
-  kpPlotMarkers(kp, data=genes[ids, ], labels=genes$gene_name[ids], r1 = 0.6, cex=0.65, text.orientation = "vertical", data.panel = 2, label.color=colors2)
+  colors2 = colors[tmp_genes]
+  kpPlotMarkers(kp, data=genes[ids, ], labels=tmp_genes, r1 = 0.6, cex=0.65, text.orientation = "horizontal", data.panel = 2, label.color=colors2)
   
   
   # 
