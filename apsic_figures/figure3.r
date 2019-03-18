@@ -54,34 +54,48 @@ plotInChromosomeContext <- function(candidGenes, geneAnnot) {
 
 candidateGenes  <- function(cancer_type ) {
   
-  # non-genetic high : potential tumor suppressor
   dat = read.csv(paste0("../apsic_shiny/apsic_pvalues/", cancer_type, "/", cancer_type, 
-                 "-non-genetic-high.csv"), stringsAsFactors = FALSE)
-  n = nrow(dat)
-  gene_set1 = dat[which(dat$pvalue_wt < 1/n & dat$tumor_expressed_less <0.05), "gene"]
+                        "-missense-low.csv"), stringsAsFactors = FALSE)
+  
+  nrOfCelllines = dat[1, ]$freq_mut + dat[1,]$freq_wt
+  minNrOfCelllines=ceiling(nrOfCelllines/100)
+  
+  gene_set1 = gene_set2 = ""
+  # non-genetic high : potential tumor suppressor
+  fname = paste0("../apsic_shiny/apsic_pvalues/", cancer_type, "/", cancer_type, 
+                 "-non-genetic-high.csv")
+  if(file.exists(fname)) {
+    dat = read.csv(fname, stringsAsFactors = FALSE)
+    n = sum(dat$freq_wt > minNrOfCelllines)
+    gene_set1 = dat[which(dat$pvalue_wt < 1/n & dat$tumor_expressed_less <0.05), "gene"]
+  }
 
   # non-genetic low
-  dat = read.csv(paste0("../apsic_shiny/apsic_pvalues/", cancer_type, "/", cancer_type, 
-                        "-non-genetic-low.csv"), stringsAsFactors = FALSE)
-  gene_set2 = dat[which(dat$pvalue_wt < 1/n & dat$tumor_expressed_more <0.05), "gene"]
+  fname = paste0("../apsic_shiny/apsic_pvalues/", cancer_type, "/", cancer_type, 
+                 "-non-genetic-low.csv")
+  if(file.exists(fname)) {
+    dat = read.csv( fname, stringsAsFactors = FALSE)
+    n = sum(dat$freq_wt > minNrOfCelllines)
+    gene_set2 = dat[which(dat$pvalue_wt < 1/n & dat$tumor_expressed_more <0.05), "gene"]
+  }
   
   # missense
   dat = read.csv(paste0("../apsic_shiny/apsic_pvalues/", cancer_type, "/", cancer_type, 
                         "-missense-low.csv"), stringsAsFactors = FALSE)
-  n = sum(dat$freq_mut > 1)
+  n = sum(dat$freq_mut > minNrOfCelllines)
   gene_set3 = dat[which(dat$pvalue_mut < 1/n & dat$pvalue_wt > 0.05), "gene"]
 
   # amplification
   dat = read.csv(paste0("../apsic_shiny/apsic_pvalues/", cancer_type, "/", cancer_type, 
                         "-amplification-low.csv"), stringsAsFactors = FALSE)
-  n = sum(dat$freq_mut > 1)
+  n = sum(dat$freq_mut > minNrOfCelllines)
   gene_set4 = dat[which(dat$pvalue_mut < 1/n & dat$pvalue_wt > 0.05), "gene"]
   
   
   # truncating
   dat = read.csv(paste0("../apsic_shiny/apsic_pvalues/", cancer_type, "/", cancer_type, 
                         "-truncating-high.csv"), stringsAsFactors = FALSE)
-  n = sum(dat$freq_mut > 1)
+  n = sum(dat$freq_mut > minNrOfCelllines)
   gene_set5 = dat[which(dat$pvalue_mut < 1/n & dat$pvalue_wt > 0.05), "gene"]
   
   
