@@ -45,7 +45,7 @@ plotInChromosomeContext <- function(candidGenes, geneAnnot) {
   kpPlotMarkers(kp, data=genes[ids, ], labels=tmp_genes, r1 = 0.6, cex=0.65, text.orientation = "horizontal", data.panel = 1, label.color=colors2)
   
   ids = seq(1, length(genes), by=2)
-  colors2 = colors[tmp_genes]
+  colors2 = colors[genes$gene_name[ids]]
   kpPlotMarkers(kp, data=genes[ids, ], labels=tmp_genes, r1 = 0.6, cex=0.65, text.orientation = "horizontal", data.panel = 2, label.color=colors2)
   
   
@@ -140,7 +140,10 @@ candidGenes = candidateGenes(cancer_type)
 # gene_names = unname(unlist(candidGenes))
 # typeOfGenes
 
+pdf("a.pdf")
 plotInChromosomeContext(candidGenes, geneAnnot)
+
+dev.off()
 # 
 # load("../apsic_shiny/cancerData.RData")
 # a = 0:4
