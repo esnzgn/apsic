@@ -3,8 +3,18 @@ rm(list=ls())
 library(karyoploteR)
 
 
-plotInChromosomeContext <- function(gene_names, geneAnnot) {
-
+plotInChromosomeContext <- function(candidGenes, geneAnnot) {
+  # TODO solve duplicated genes
+  
+  colors = c(rep("red", length(candidGenes$nongen_low)) , rep("blue", length(candidGenes$nongen_high)), 
+             rep("yellow", length(candidGenes$gen_missense)), rep("green", length(candidGenes$gen_amplification)),
+             rep("purple", length(candidGenes$gen_truncating)))
+  
+  
+  gene_names = names(colors) = unname(unlist(candidGenes))
+  
+  
+  # gene_names = unique(unlist(candidGenes) )
     # compute list of chromosomes which contain gene_names  
   genes_hg38_ = geneAnnot[which(geneAnnot$gene_name %in% gene_names), c("seqnames", "start", "end", "gene_name", "width")]
   genes_hg38 = genes_hg38_[order(genes_hg38_$gene_name, genes_hg38_$width), 1:4]
@@ -25,25 +35,21 @@ plotInChromosomeContext <- function(gene_names, geneAnnot) {
   kp <- plotKaryotype(genome="hg38", plot.type = 2, chromosomes=paste0("chr",u_chros) )
 
   n = length(genes@seqnames)
-
-
-  odds = seq(1, length(genes), by=2)
-  kpPlotMarkers(kp, data=genes[odds, ], labels=genes$gene_name[odds], r1 = 0.6, cex=0.65, text.orientation = "horizontal", data.panel = 1, label.color="#7b3294")
   
-  evens = seq(2, length(genes), by=2)
-  kpPlotMarkers(kp, data=genes[evens, ], labels=genes$gene_name[evens], r1 = 0.6, cex=0.65, text.orientation = "horizontal", data.panel = 2)
+  
+  ids = seq(2, length(genes), by=2)
+  tmp_genes = sapply(genes$gene_name[ids], toString)
+  
+  colors2 = colors[tmp_genes]
+  kpPlotMarkers(kp, data=genes[ids, ], labels=tmp_genes, r1 = 0.6, cex=0.65, text.orientation = "horizontal", data.panel = 1, label.color=colors2)
+  
+  ids = seq(1, length(genes), by=2)
+  tmp_genes = sapply(genes$gene_name[ids], toString)
+  colors2 = colors[tmp_genes]
+  kpPlotMarkers(kp, data=genes[ids, ], labels=tmp_genes, r1 = 0.6, cex=0.65, text.orientation = "horizontal", data.panel = 2, label.color=colors2)
 }
 
 
-geneAnnot = read.table("Homo_sapiens.GRCh38.p10_genes.csv", sep='\t')
-
-
-dat = read.csv("../apsic_shiny/apsic_pvalues/Pan_cancer/Pan_cancer-missense-low.csv", stringsAsFactors = FALSE)
-n = nrow(dat)
-apsic_result = dat[which(dat$pvalue_wt > 0.05 & dat$pvalue_mut < 1/n),]
-gene_names = apsic_result$gene
-
-plotInChromosomeContext(gene_names, geneAnnot)
 
 
 candidateGenes  <- function(cancer_type ) {
@@ -85,8 +91,28 @@ candidateGenes  <- function(cancer_type ) {
 
 #############################
 
+geneAnnot = read.table("Homo_sapiens.GRCh38.p10_genes.csv", sep='\t', stringsAsFactors = FALSE)
+
 cancer_type = "Breast_Carcinoma"
 # cancer_type = "Liver_HCC"
-gene_names = candidateGenes(cancer_type)
+candidGenes = candidateGenes(cancer_type)
 
-plotInChromosomeContext(unique(unlist(gene_names) ), geneAnnot)
+# gene_names = unname(unlist(candidGenes))
+# typeOfGenes
+
+# pdf("a.pdf")
+plotInChromosomeContext(candidGenes, geneAnnot)
+
+# dev.off()
+# 
+# load("../apsic_shiny/cancerData.RData")
+# a = 0:4
+# for (i in a){
+#   i = i + 1
+#   print(cancer_type)
+#   pdf(paste0("KP", cancer_type)) <- plotInChromosomeContext(candidGenes, geneAnnot)
+#   
+#
+#  
+# }
+# cancer_type
