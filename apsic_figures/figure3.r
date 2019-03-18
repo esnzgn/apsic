@@ -93,26 +93,19 @@ candidateGenes  <- function(cancer_type ) {
 
 geneAnnot = read.table("Homo_sapiens.GRCh38.p10_genes.csv", sep='\t', stringsAsFactors = FALSE)
 
-cancer_type = "Breast_Carcinoma"
-# cancer_type = "Liver_HCC"
-candidGenes = candidateGenes(cancer_type)
-
-# gene_names = unname(unlist(candidGenes))
-# typeOfGenes
-
-# pdf("a.pdf")
-plotInChromosomeContext(candidGenes, geneAnnot)
-
-# dev.off()
+# cancer_type = "Breast_Carcinoma"
+# # cancer_type = "Liver_HCC"
+# candidGenes = candidateGenes(cancer_type)
 # 
-# load("../apsic_shiny/cancerData.RData")
-# a = 0:4
-# for (i in a){
-#   i = i + 1
-#   print(cancer_type)
-#   pdf(paste0("KP", cancer_type)) <- plotInChromosomeContext(candidGenes, geneAnnot)
-#   
-#
-#  
-# }
-# cancer_type
+
+output_folder =  "figures/fig3/"
+dir.create(output_folder, showWarnings = FALSE, recursive = TRUE)
+file_names = list.files("../apsic_shiny/apsic_pvalues/")
+
+for(fname in file_names)
+{
+  candidGenes = candidateGenes(fname)
+  pdf(paste0(output_folder, fname, ".pdf"), 14, 8)
+  plotInChromosomeContext(candidGenes, geneAnnot)
+  dev.off()
+}
