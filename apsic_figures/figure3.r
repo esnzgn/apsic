@@ -49,7 +49,7 @@ plotInChromosomeContext <- function(candidGenes, geneAnnot, plot_title) {
   kpPlotMarkers(kp, data=genes[ids, ], labels=tmp_genes, r1 = 0.6, cex=0.65, text.orientation = "horizontal", data.panel = 2, label.color=colors2)
   legend("bottomright", legend=c("Oncogene mutation", "Oncogene amplification", "Tumor suppressor mutation",
                                  "Non-genetic oncogene", "Non-genetic tumor suppressor"), 
-         col=c("orange", "green", "purple", "blue", "red"), cex=1, lty=1)
+         col=c("orange", "green", "purple", "blue", "red"), cex=1, lty=1, lwd=2)
 }
 
 
