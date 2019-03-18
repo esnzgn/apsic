@@ -85,8 +85,8 @@ candidateGenes  <- function(cancer_type ) {
 
 #############################
 
-#cancer_type = "Breast_Carcinoma"
-cancer_type = "Liver_HCC"
+cancer_type = "Breast_Carcinoma"
+# cancer_type = "Liver_HCC"
 gene_names = candidateGenes(cancer_type)
 
-plotInChromosomeContext(unlist(gene_names), geneAnnot)
+plotInChromosomeContext(unique(unlist(gene_names) ), geneAnnot)
