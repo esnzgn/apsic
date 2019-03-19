@@ -1,5 +1,8 @@
 rm(list=ls())
 library(pheatmap)
+library(reshape2)
+library(ggplot2)
+library(scales)
 
 set.seed(1000)
 driverGenesPanCancer <-  function() {
@@ -93,10 +96,13 @@ plotHeatmap <- function(dat) {
   print(handle)
 }
 
+head(data_low)
 
 data_low = prepareTCGADataMatrix("low")
 plotHeatmap(data_low)
 
 data_high = prepareTCGADataMatrix("high")
 
+pdf("figures/fig2.pdf")
 plotHeatmap(data_high)
+dev.off()
