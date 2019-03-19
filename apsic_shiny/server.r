@@ -1,4 +1,6 @@
 
+
+
 shinyServer(function(input, output){
   output$GS <- renderText(input$gene)
   output$CN <- renderText(input$cancer)
@@ -132,6 +134,40 @@ shinyServer(function(input, output){
     }
   })
   
+  getPValue <- function(gene, cancer, alter_type, ptype ) {
+    tmp = str_replace(cancer, "[: ]", "_")
+    A <- paste0("apsic_pvalues/", tmp,"/", tmp, "-", alter_type, ".csv")
+    if(file.exists(A)) {
+      dat = read.csv(A, row.names = 1)
+      return(dat[gene, ptype])
+    }
+    return(NULL)
+  }
+  
+  output$ptable <- renderTable({ 
+ 
+    
+    
+    data = data.frame(matrix(ncol=2, nrow=3))
+    colnames(data) = c("Type", "P Value")
+    
+    data[1, ] = c("amplification-low", getPValue(input$gene, input$cancer, "amplification-low",  "pvalue_wt") )
+    data[2, ] = c("missense-low", getPValue(input$gene, input$cancer, "missense-low",  "pvalue_wt")) 
+    data[3, ] = c("truncating-high", getPValue(input$gene, input$cancer, "truncating-high",  "pvalue_wt")) 
+    
+    p_value = getPValue(input$gene, input$cancer, "non-genetic-low",  "pvalue_wt")
+    if(is.null(p_value) == FALSE) {
+      data[4, ] = c("non-genetic-low", p_value)    
+      
+    }
+    p_value = getPValue(input$gene, input$cancer, "non-genetic-high",  "pvalue_wt")
+    if(is.null(p_value) == FALSE) {
+      data[5, ] = c("non-genetic-high", p_value)    
+    }
+    print(getPValue(input$gene, input$cancer, "non-genetic-low",  "pvalue_wt"))
+  
+    data
+    })
 
   
   
