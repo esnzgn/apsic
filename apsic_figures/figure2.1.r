@@ -1,5 +1,9 @@
 rm(list=ls())
 library(pheatmap)
+library(reshape2)
+library(ggplot2)
+library(scales)
+
 
 
 plotHeatmap <- function(dat) {
@@ -29,7 +33,7 @@ dat_missense = read.csv(paste0("../apsic_shiny/apsic_pvalues/", cancer_type, "/"
 dat_missense <- data.frame(dat_missense)
 typeof(dat_missense)
 
-dat_missense_sort= dat_missense[order(dat_missense$pvalue_wt),]
+dat_missense_sort= dat_missense[order(as.numeric(dat_missense$pvalue_mut)),]
 
 # head(dat_missense_sort)
 # typeof(dat_missense)
