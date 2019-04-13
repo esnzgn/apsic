@@ -13,7 +13,7 @@ plotHeatmap <- function(dat) {
   dat.m = melt(dat)
   names(dat.m) <- c("gene", "type", "pvalue")
   dat.m$pvalue[dat.m$pvalue < 10^(-20)] = 10^(-20)
-  handle = ggplot(dat.m, aes(type, gene)) +
+  handle = ggplot(dat.m, aes(type, gene),font=3) +
     geom_tile(aes(fill = pvalue), color = "white") + 
     scale_fill_gradientn(values=rescale(c(10^(-20), 10^(-5), 0.001,  1)), colours=c("red3", "red2", "red1",  "white") ) +
     ylab("") +
@@ -22,8 +22,11 @@ plotHeatmap <- function(dat) {
     theme(plot.title = element_text(size=16),
           axis.title=element_text(size=14,face="bold"),
           axis.text.x = element_text(angle = 90, hjust = 1),
-          legend.position = "none") 
+          legend.position = "top")
+  
+  
   print(handle)
+
 }
 
 cancer_type = "Pan_cancer"
@@ -31,7 +34,7 @@ cancer_type = "Pan_cancer"
 dat_missense = read.csv(paste0("../apsic_shiny/apsic_pvalues/", cancer_type, "/", cancer_type, 
                                "-missense-low.csv"), stringsAsFactors = FALSE, row.names = 1,header = TRUE)
 dat_missense <- data.frame(dat_missense)
-typeof(dat_missense)
+# typeof(dat_missense)
 
 dat_missense_sort= dat_missense[order(as.numeric(dat_missense$pvalue_mut)),]
 
@@ -60,7 +63,9 @@ f_pvalue_vector <- function(gene_names, cancer){
 
 cancers = list.files("../apsic_shiny/apsic_pvalues/")
 
-cancers = cancers[-which(cancers == "Pan_cancer")]
+
+cancers = c(cancers[which(cancers == "Pan_cancer")],cancers[-which(cancers == "Pan_cancer")])
+
 
 # cancer = "Bladder_Carcinoma"
 pvalues = matrix(0, 30, length(cancers))
@@ -71,9 +76,12 @@ for(cancer in cancers) {
   pvalues[, i] = f_pvalue_vector(gene_names,cancer)  
    i = i+1
 }
+pvalue_pan = dat_missense_sort[1:30, "pvalue_wt"]
+# pvalues = cbind(pvalue_pan, pvalue)
+pvalues = pvalues[order(pvalues[,1], decreasing = TRUE),]
 plotHeatmap(pvalues)
 
 
-
+# dev.off()
 
 
