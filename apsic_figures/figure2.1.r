@@ -56,7 +56,7 @@ f_pvalue_vector <- function(gene_names, cancer){
   
   dat = read.csv(paste0("../apsic_shiny/apsic_pvalues/", cancer, "/", cancer, 
                                  "-missense-low.csv"), stringsAsFactors = FALSE, row.names = 1,header = TRUE)
-   dat[gene_names,"pvalue_wt"]
+   dat[gene_names,"pvalue_mut"]
   
 }
 # ######
@@ -76,9 +76,9 @@ for(cancer in cancers) {
   pvalues[, i] = f_pvalue_vector(gene_names,cancer)  
    i = i+1
 }
-pvalue_pan = dat_missense_sort[1:30, "pvalue_wt"]
+pvalue_pan = dat_missense_sort[1:30, "pvalue_mut"]
 # pvalues = cbind(pvalue_pan, pvalue)
-pvalues = pvalues[order(pvalues[,1], decreasing = TRUE),]
+pvalues = pvalues[order(pvalues[, "Pan_cancer"]), decreasing = TRUE),]
 plotHeatmap(pvalues)
 
 
