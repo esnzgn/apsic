@@ -9,10 +9,11 @@ plotHeatmap <- function(dat) {
   
   dat.m = melt(dat)
   names(dat.m) <- c("gene", "type", "pvalue")
-  dat.m$pvalue[dat.m$pvalue < 10^(-20)] = 10^(-20)
+  # dat.m$pvalue[dat.m$pvalue < 10^(-20)] = 10^(-20)
   handle = ggplot(dat.m, aes(type, gene),font=3) +
     geom_tile(aes(fill = pvalue), color = "white") + 
-    scale_fill_gradientn(values=rescale(c(10^(-20), 10^(-5), 0.001, 0.01, 0.3,  1)), colours=c("red3", "red2", "red1", "orange", "white",  "white") ) +
+    # scale_fill_gradientn(values=rescale(c(10^(-20), 10^(-5), 0.001, 0.01, 0.3,  1)), colours=c("red3", "red2", "red1", "orange", "white",  "white") ) +
+    scale_fill_gradientn(values=rescale(c(-20, -5, -3, -2, log10(0.05),  0)), colours=c("red3", "red2", "red1", "orange", "white",  "white") ) +
     ylab("") +
     xlab("") +
     theme_bw()+
@@ -66,8 +67,8 @@ selectImportantNongeneticGenes <- function(feature_type, cancers) {
     dat = read.csv(paste0("../apsic_shiny/apsic_pvalues/", cancer, "/", cancer, 
                           "-",feature_type, ".csv"), stringsAsFactors = FALSE, row.names = 1,header = TRUE)
     
-    print(cancer)
-    print(head(dat[order(as.numeric(dat$pvalue_wt), decreasing = F), "gene" ], 5) )
+    # print(cancer)
+    # print(head(dat[order(as.numeric(dat$pvalue_wt), decreasing = F), "gene" ], 5) )
     
     gene_names = c(gene_names, head(dat[order(as.numeric(dat$pvalue_wt), decreasing = F), "gene" ], 5) )
   }
@@ -122,7 +123,7 @@ combined_pvalues = apply(pvalues, 1, function(x) {
 pvalues = pvalues[order(combined_pvalues), ]
 
 pdf("non-genetic-high.pdf", 7, 15)
-plotHeatmap(pvalues)
+plotHeatmap(log10(pvalues) )
 dev.off()
 
 
@@ -136,5 +137,5 @@ combined_pvalues = apply(pvalues, 1, function(x) {
 pvalues = pvalues[order(combined_pvalues), ]
 
 pdf("non-genetic-low.pdf", 7, 17)
-plotHeatmap(pvalues)
+plotHeatmap(log10(pvalues) )
 dev.off()
