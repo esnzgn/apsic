@@ -15,11 +15,12 @@ plotDriverGenes <- function(MutMat) {
           axis.title.x=element_text(angle=0, size=13, face="bold",vjust=1,colour="#525252"),
           axis.title.y=element_text(angle=90, size=13, face="bold",vjust=0,colour="#525252"),
           legend.position = "none")+
+    # colors
     scale_fill_gradient(low="white",high="blue")
 }
 
 
-plotPerturbationProfile <- function(perturbData) {
+plotPerturbationProfile <- function(perturbData, col1 = "red", col2="royalblue", col3="white") {
   q <- ggplot(melt(perturbData), aes(Var1, Var2)) + 
     geom_tile(aes(fill = value),alpha=0.75)+
     ylab("Cell Lines") + 
@@ -37,6 +38,7 @@ plotPerturbationProfile <- function(perturbData) {
           axis.title.y=element_text(angle=90, size=11,face="bold",vjust=0,colour="#525252"),
           legend.position = "bottom")+
     # scale_fill_viridis(option="plasma",begin = 0,end = 1)
-    scale_fill_gradient2(low = "red", high="royalblue", mid="white", midpoint = 0)
+    # colors
+    scale_fill_gradient2(low = col2, high=col2, mid=col3, midpoint = 0)
   print(q)
 }

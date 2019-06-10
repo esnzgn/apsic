@@ -91,7 +91,7 @@ dev.off()
 
 # plot perturbation profile
 n = nrow(selectedData$viabilities)
-perturbData = as.matrix(selectedData$viabilities[sample(n, 100), ])
+perturbData = as.matrix(selectedData$viabilities[sample(n, 40), ])
 
 pdf(paste0(fig_folder,"fig-1-perturb-profile.pdf"), 10, 6)
 plotPerturbationProfile(perturbData)

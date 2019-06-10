@@ -1,143 +1,234 @@
 rm(list=ls())
 library(karyoploteR)
 
-candidGenes_redundency_scanner <- function(candidGenes){
+annotateGene <- function(gene, candidGenes){
+  ann = candidGenes
+  for (i in gene){
+    if(i %in% candidGenes$nongen_high) {
+      ann$nongen_high[which(ann$nongen_high == i)] = paste0(ann$nongen_high[which(ann$nongen_high == i)], "#")
+    }
+    if(i %in% candidGenes$nongen_low) {
+      ann$nongen_low[which(ann$nongen_low == i)] = paste0(ann$nongen_low[which(ann$nongen_low == i)], "*")
+    }
+    if(i %in% candidGenes$gen_missense) {
+      ann$gen_missense[which(ann$gen_missense == i)] = paste0(ann$gen_missense[which(ann$gen_missense == i)], "@")
+    }
+    if(i %in% candidGenes$gen_amplification) {
+      ann$gen_amplification[which(ann$gen_amplification == i)] = paste0(ann$gen_amplification[which(ann$gen_amplification == i)], "$")
+    }
+    if(i %in% candidGenes$gen_truncating) {
+      ann$gen_truncating[which(ann$gen_truncating == i)] = paste0(ann$gen_truncating[which(ann$gen_truncating == i)], "&")
+    }
+  }
   
-  # nongene_high as template
-  no_ngh = length(candidGenes$nongen_high)
-  if (no_ngh > 0){
-    for (i in no_ngh){
-      no_ngl = length(candidGenes$nongen_low)
-      for (z in no_ngl){
-        if (candidGenes$nongen_high[i] == candidGenes$nongen_low[z]){
-          candidGenes$nongen_high[i] = paste0(candidGenes$nongen_high[i], "*")}}
-      z = 1
-      no_gm = length(candidGenes$gen_missense)
-      for (z in no_gm){
-        if (candidGenes$nongen_high[i] == candidGenes$gen_missense[z]){
-          candidGenes$nongen_high[i] = paste0(candidGenes$nongen_high[i], "@")}}
-      z = 1
-      no_ga = length(candidGenes$gen_amplification)
-      for (z in no_ga){
-        if (candidGenes$nongen_high[i] == candidGenes$gen_amplification[z]){
-          candidGenes$nongen_high[i] = paste0(candidGenes$nongen_high[i], "$")}}
-      z = 1
-      no_gt = length(candidGenes$gen_truncating)
-      for (z in no_gt){
-        if (candidGenes$nongen_high[i] == candidGenes$gen_truncating[z]){
-          candidGenes$nongen_high[i] = paste0(candidGenes$nongen_high[i], "&")}}
-      
-    }
-  }
-  # nongene_low as template
-  no_ngl = length(candidGenes$nongen_low)
-  if (no_ngl > 0){
-    for (i in no_ngl){
-      no_ngh = length(candidGenes$nongen_high)
-      z = 1
-      for (z in no_ngh){
-        if (candidGenes$nongen_low[i] == candidGenes$nongen_high[z]){
-          candidGenes$nongen_low[i] = paste0(candidGenes$nongen_low[i], "#")}}
-      z = 1
-      no_gm = length(candidGenes$gen_missense)
-      for (z in no_gm){
-        if (candidGenes$nongen_high[i] == candidGenes$gen_missense[z]){
-          candidGenes$nongen_low[i] = paste0(candidGenes$nongen_low[i], "@")}}
-      z = 1
-      no_ga = length(candidGenes$gen_amplification)
-      for (z in no_ga){
-        if (candidGenes$nongen_low[i] == candidGenes$gen_amplification[z]){
-          candidGenes$nongen_low[i] = paste0(candidGenes$nongen_low[i], "$")}}
-      z = 1
-      no_gt = length(candidGenes$gen_truncating)
-      for (z in no_gt){
-        if (candidGenes$nongen_low[i] == candidGenes$gen_truncating[z]){
-          candidGenes$nongen_low[i] = paste0(candidGenes$nongen_low[i], "&")}}
-      
-    }
-  }
-  # gen_missense as template
-  no_gm = length(candidGenes$gen_missense)
-  if (no_gm > 0){
-    for (i in no_gm){
-      no_ngh = length(candidGenes$nongen_high)
-      z = 1
-      for (z in no_ngh){
-        if (candidGenes$gen_missense[i] == candidGenes$nongen_high[z]){
-          candidGenes$gen_missense[i] = paste0(candidGenes$gen_missense[i], "#")}}
-      z = 1
-      no_ngl = length(candidGenes$nongen_low)
-      for (z in no_ngl){
-        if (candidGenes$gen_missense[i] == candidGenes$nongen_low[z]){
-          candidGenes$gen_missense[i] = paste0(candidGenes$gen_missense[i], "*")}}
-      z = 1
-      no_ga = length(candidGenes$gen_amplification)
-      for (z in no_ga){
-        if (candidGenes$gen_missense[i] == candidGenes$gen_amplification[z]){
-          candidGenes$gen_missense[i] = paste0(candidGenes$gen_missense[i], "$")}}
-      z = 1
-      no_gt = length(candidGenes$gen_truncating)
-      for (z in no_gt){
-        if (candidGenes$gen_missense[i] == candidGenes$gen_truncating[z]){
-          candidGenes$gen_missense[i] = paste0(candidGenes$gen_missense[i], "&")}}
-      
-    }
-  }
-  # gen_amplification as template
-  no_ga = length(candidGenes$gen_amplification)
-  if (no_ga > 0){
-    for (i in no_ga){
-      no_ngh = length(candidGenes$nongen_high)
-      z = 1
-      for (z in no_ngh){
-        if (candidGenes$gen_amplification[i] == candidGenes$nongen_high[z]){
-          candidGenes$gen_amplification[i] = paste0(candidGenes$gen_amplification[i], "#")}}
-      z = 1
-      no_ngl = length(candidGenes$nongen_low)
-      for (z in no_ngl){
-        if (candidGenes$gen_amplification[i] == candidGenes$nongen_low[z]){
-          candidGenes$gen_amplification[i] = paste0(candidGenes$gen_amplification[i], "*")}}
-      z = 1
-      no_gm = length(candidGenes$gen_missense)
-      for (z in no_ngl){
-        if (candidGenes$gen_amplification[i] == candidGenes$gen_missense[z]){
-          candidGenes$gen_amplification[i] = paste0(candidGenes$gen_amplification[i], "@")}}
-      z = 1
-      no_gt = length(candidGenes$gen_truncating)
-      for (z in no_gt){
-        if (candidGenes$gen_amplification[i] == candidGenes$gen_truncating[z]){
-          candidGenes$gen_amplification[i] = paste0(candidGenes$gen_amplification[i], "&")}}
-      
-    }
-  }
-  # gen_truncating as template
-  no_gt = length(candidGenes$gen_truncating)
-  if (no_gt > 0){
-    for (i in no_gt){
-      no_ngh = length(candidGenes$nongen_high)
-      z = 1
-      for (z in no_ngh){
-        if (candidGenes$gen_truncating[i] == candidGenes$nongen_high[z]){
-          candidGenes$gen_truncating[i] = paste0(candidGenes$gen_truncating[i], "#")}}
-      z = 1
-      no_ngl = length(candidGenes$nongen_low)
-      for (z in no_ngl){
-        if (candidGenes$gen_truncating[i] == candidGenes$nongen_low[z]){
-          candidGenes$gen_truncating[i] = paste0(candidGenes$gen_truncating[i], "*")}}
-      z = 1
-      no_gm = length(candidGenes$gen_missense)
-      for (z in no_ngl){
-        if (candidGenes$gen_truncating[i] == candidGenes$gen_missense[z]){
-          candidGenes$gen_truncating[i] = paste0(candidGenes$gen_truncating[i], "@")}}
-      z = 1
-      no_ga = length(candidGenes$gen_amplification)
-      for (z in no_ga){
-        if (candidGenes$gen_truncating[i] == candidGenes$gen_amplification[z]){
-          candidGenes$gen_truncating[i] = paste0(candidGenes$gen_truncating[i], "&")}}
-      
-    }
-  } 
+  ann
 }
+
+gene = c("LRRC4B", "CHST5", "PRKRA", "LRRC39", "MED1")
+annotateGene(gene, candidGenes)
+
+# CandidGenes_Redundency_Scanner <-function(candidGenes){
+#   
+#   candidGenesAnnot = candidGenes
+#   
+#   # NGH scan
+#   for (i in candidGenes$nongen_high){
+#     if (i %in% candidGenes$nongen_low){
+#       candidGenesAnnot[1][which(candidGenesAnnot[1]==i)] = paste0(candidGenesAnnot[1][which(candidGenesAnnot[1]==i)], "*")}
+#     if (i %in% candidGenes$gen_missense){
+#       candidGenesAnnot[1][which(candidGenesAnnot[1]==i)] = paste0(candidGenesAnnot[1][which(candidGenesAnnot[1]==i)], "@")}
+#     if (i %in% candidGenes$gen_amplification){
+#       candidGenesAnnot[1][which(candidGenesAnnot[1]==i)] = paste0(candidGenesAnnot[1][which(candidGenesAnnot[1]==i)], "$")}
+#     if (i %in% candidGenes$gen_truncating){
+#       candidGenesAnnot[1][which(candidGenesAnnot[1]==i)] = paste0(candidGenesAnnot[1][which(candidGenesAnnot[1]==i)], "&")}
+#     }
+#   # NGL scan
+#   for (i in candidGenes$nongen_low){
+#     if (i %in% candidGenes$nongen_high){
+#       return(print(i))
+#       paste0(candidGenesAnnot[2][which(candidGenesAnnot[2]==i)], "#")}
+#     if (i %in% candidGenes$gen_missense){
+#       paste0(candidGenesAnnot[2][which(candidGenesAnnot[2]==i)], "@")}
+#     if (i %in% candidGenes$gen_amplification){
+#       paste0(candidGenesAnnot[2][which(candidGenesAnnot[2]==i)], "$")}
+#     if (i %in% candidGenes$gen_truncating){
+#       paste0(candidGenesAnnot[2][which(candidGenesAnnot[2]==i)], "&")}
+#   }
+#   # MS scan
+#   for (i in candidGenes$gen_missense){
+#     if (i %in% candidGenes$nongen_high){
+#       paste0(candidGenesAnnot[3][which(candidGenesAnnot[3]==i)], "#")}
+#     if (i %in% candidGenes$nongen_low){
+#       paste0(candidGenesAnnot[3][which(candidGenesAnnot[3]==i)], "*")}
+#     if (i %in% candidGenes$gen_amplification){
+#       paste0(candidGenesAnnot[3][which(candidGenesAnnot[3]==i)], "$")}
+#     if (i %in% candidGenes$gen_truncating){
+#       paste0(candidGenesAnnot[3][which(candidGenesAnnot[3]==i)], "&")}
+#   }
+#   # GA scan
+#   for (i in candidGenes$gen_amplification){
+#     if (i %in% candidGenes$nongen_high){
+#       paste0(candidGenesAnnot[4][which(candidGenesAnnot[4]==i)], "#")}
+#     if (i %in% candidGenes$nongen_low){
+#       paste0(candidGenesAnnot[4][which(candidGenesAnnot[4]==i)], "*")}
+#     if (i %in% candidGenes$gen_missense){
+#       paste0(candidGenesAnnot[4][which(candidGenesAnnot[4]==i)], "@")}
+#     if (i %in% candidGenes$gen_truncating){
+#       paste0(candidGenesAnnot[4][which(candidGenesAnnot[4]==i)], "&")}
+#   }
+#   # GT scan
+#   for (i in candidGenes$gen_truncating){
+#     if (i %in% candidGenes$nongen_high){
+#       paste0(candidGenesAnnot[5][which(candidGenesAnnot[5]==i)], "#")}
+#     if (i %in% candidGenes$nongen_low){
+#       paste0(candidGenesAnnot[5][which(candidGenesAnnot[5]==i)], "*")}
+#     if (i %in% candidGenes$gen_missense){
+#       paste0(candidGenesAnnot[5][which(candidGenesAnnot[5]==i)], "@")}
+#     if (i %in% candidGenes$gen_amplification){
+#       paste0(candidGenesAnnot[5][which(candidGenesAnnot[5]==i)], "$")}
+#   }
+#   candidGenesAnnot
+# }
+
+
+
+# candidGenes_redundency_scanner <- function(candidGenes){
+#   
+#   # nongene_high as template
+#   no_ngh = length(candidGenes$nongen_high)
+#   if (no_ngh > 0){
+#     for (i in no_ngh){
+#       no_ngl = length(candidGenes$nongen_low)
+#       for (z in no_ngl){
+#         if (candidGenes$nongen_high[i] == candidGenes$nongen_low[z]){
+#           candidGenes$nongen_high[i] = paste0(candidGenes$nongen_high[i], "*")}}
+#       z = 1
+#       no_gm = length(candidGenes$gen_missense)
+#       for (z in no_gm){
+#         if (candidGenes$nongen_high[i] == candidGenes$gen_missense[z]){
+#           candidGenes$nongen_high[i] = paste0(candidGenes$nongen_high[i], "@")}}
+#       z = 1
+#       no_ga = length(candidGenes$gen_amplification)
+#       for (z in no_ga){
+#         if (candidGenes$nongen_high[i] == candidGenes$gen_amplification[z]){
+#           candidGenes$nongen_high[i] = paste0(candidGenes$nongen_high[i], "$")}}
+#       z = 1
+#       no_gt = length(candidGenes$gen_truncating)
+#       for (z in no_gt){
+#         if (candidGenes$nongen_high[i] == candidGenes$gen_truncating[z]){
+#           candidGenes$nongen_high[i] = paste0(candidGenes$nongen_high[i], "&")}}
+#       
+#     }
+#   }
+#   # nongene_low as template
+#   no_ngl = length(candidGenes$nongen_low)
+#   if (no_ngl > 0){
+#     for (i in no_ngl){
+#       no_ngh = length(candidGenes$nongen_high)
+#       z = 1
+#       for (z in no_ngh){
+#         if (candidGenes$nongen_low[i] == candidGenes$nongen_high[z]){
+#           candidGenes$nongen_low[i] = paste0(candidGenes$nongen_low[i], "#")}}
+#       z = 1
+#       no_gm = length(candidGenes$gen_missense)
+#       for (z in no_gm){
+#         if (candidGenes$nongen_high[i] == candidGenes$gen_missense[z]){
+#           candidGenes$nongen_low[i] = paste0(candidGenes$nongen_low[i], "@")}}
+#       z = 1
+#       no_ga = length(candidGenes$gen_amplification)
+#       for (z in no_ga){
+#         if (candidGenes$nongen_low[i] == candidGenes$gen_amplification[z]){
+#           candidGenes$nongen_low[i] = paste0(candidGenes$nongen_low[i], "$")}}
+#       z = 1
+#       no_gt = length(candidGenes$gen_truncating)
+#       for (z in no_gt){
+#         if (candidGenes$nongen_low[i] == candidGenes$gen_truncating[z]){
+#           candidGenes$nongen_low[i] = paste0(candidGenes$nongen_low[i], "&")}}
+#       
+#     }
+#   }
+#   # gen_missense as template
+#   no_gm = length(candidGenes$gen_missense)
+#   if (no_gm > 0){
+#     for (i in no_gm){
+#       no_ngh = length(candidGenes$nongen_high)
+#       z = 1
+#       for (z in no_ngh){
+#         if (candidGenes$gen_missense[i] == candidGenes$nongen_high[z]){
+#           candidGenes$gen_missense[i] = paste0(candidGenes$gen_missense[i], "#")}}
+#       z = 1
+#       no_ngl = length(candidGenes$nongen_low)
+#       for (z in no_ngl){
+#         if (candidGenes$gen_missense[i] == candidGenes$nongen_low[z]){
+#           candidGenes$gen_missense[i] = paste0(candidGenes$gen_missense[i], "*")}}
+#       z = 1
+#       no_ga = length(candidGenes$gen_amplification)
+#       for (z in no_ga){
+#         if (candidGenes$gen_missense[i] == candidGenes$gen_amplification[z]){
+#           candidGenes$gen_missense[i] = paste0(candidGenes$gen_missense[i], "$")}}
+#       z = 1
+#       no_gt = length(candidGenes$gen_truncating)
+#       for (z in no_gt){
+#         if (candidGenes$gen_missense[i] == candidGenes$gen_truncating[z]){
+#           candidGenes$gen_missense[i] = paste0(candidGenes$gen_missense[i], "&")}}
+#       
+#     }
+#   }
+#   # gen_amplification as template
+#   no_ga = length(candidGenes$gen_amplification)
+#   if (no_ga > 0){
+#     for (i in no_ga){
+#       no_ngh = length(candidGenes$nongen_high)
+#       z = 1
+#       for (z in no_ngh){
+#         if (candidGenes$gen_amplification[i] == candidGenes$nongen_high[z]){
+#           candidGenes$gen_amplification[i] = paste0(candidGenes$gen_amplification[i], "#")}}
+#       z = 1
+#       no_ngl = length(candidGenes$nongen_low)
+#       for (z in no_ngl){
+#         if (candidGenes$gen_amplification[i] == candidGenes$nongen_low[z]){
+#           candidGenes$gen_amplification[i] = paste0(candidGenes$gen_amplification[i], "*")}}
+#       z = 1
+#       no_gm = length(candidGenes$gen_missense)
+#       for (z in no_ngl){
+#         if (candidGenes$gen_amplification[i] == candidGenes$gen_missense[z]){
+#           candidGenes$gen_amplification[i] = paste0(candidGenes$gen_amplification[i], "@")}}
+#       z = 1
+#       no_gt = length(candidGenes$gen_truncating)
+#       for (z in no_gt){
+#         if (candidGenes$gen_amplification[i] == candidGenes$gen_truncating[z]){
+#           candidGenes$gen_amplification[i] = paste0(candidGenes$gen_amplification[i], "&")}}
+#       
+#     }
+#   }
+#   # gen_truncating as template
+#   no_gt = length(candidGenes$gen_truncating)
+#   if (no_gt > 0){
+#     for (i in no_gt){
+#       no_ngh = length(candidGenes$nongen_high)
+#       z = 1
+#       for (z in no_ngh){
+#         if (candidGenes$gen_truncating[i] == candidGenes$nongen_high[z]){
+#           candidGenes$gen_truncating[i] = paste0(candidGenes$gen_truncating[i], "#")}}
+#       z = 1
+#       no_ngl = length(candidGenes$nongen_low)
+#       for (z in no_ngl){
+#         if (candidGenes$gen_truncating[i] == candidGenes$nongen_low[z]){
+#           candidGenes$gen_truncating[i] = paste0(candidGenes$gen_truncating[i], "*")}}
+#       z = 1
+#       no_gm = length(candidGenes$gen_missense)
+#       for (z in no_ngl){
+#         if (candidGenes$gen_truncating[i] == candidGenes$gen_missense[z]){
+#           candidGenes$gen_truncating[i] = paste0(candidGenes$gen_truncating[i], "@")}}
+#       z = 1
+#       no_ga = length(candidGenes$gen_amplification)
+#       for (z in no_ga){
+#         if (candidGenes$gen_truncating[i] == candidGenes$gen_amplification[z]){
+#           candidGenes$gen_truncating[i] = paste0(candidGenes$gen_truncating[i], "&")}}
+#       
+#     }
+#   } 
+# }
 
 
 plotInChromosomeContext <- function(candidGenes, geneAnnot, plot_title) {
@@ -250,7 +341,10 @@ geneAnnot = read.table("Homo_sapiens.GRCh38.p10_genes.csv", sep='\t', stringsAsF
 cancer_type = "Breast_Carcinoma"
 # cancer_type = "Liver_HCC"
 candidGenes = candidateGenes(cancer_type)
-candidGenes_redundency_scanner(candidGenes)
+# candidGenes_redundency_scanner(candidGenes)
+# candidGenes[1] = candidGenes[5]
+
+candidGenesAnnot <- CandidGenes_Redundency_Scanner(candidGenes)
 plotInChromosomeContext(candidGenes, geneAnnot, cancer_type)
 
 
