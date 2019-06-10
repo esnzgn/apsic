@@ -8,6 +8,7 @@ shinyUI(fluidPage(                                  #a kind of page
     ),
     mainPanel(
       tabsetPanel(type = "tab",
+                  tabPanel("Help",tags$img(src = "1.png")),
                   tabPanel("Data", tableOutput("mtcars")),
                   tabPanel("Summary",verbatimTextOutput("summ")),
                   tabPanel("plot",plotOutput("plot"))

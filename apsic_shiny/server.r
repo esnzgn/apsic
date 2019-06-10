@@ -181,28 +181,9 @@ shinyServer(function(input, output){
     data
     })
   
-  output$About_us <- renderText({
+  output$about_us <- renderText({
     # About us
     print(read_file("About_us.txt"))
   })
-  
-  # output$apsic_algo <- renderImage({
-  #   # APSIC_algo image fetching
-  #   print("1")
-  #  im <-load.image("1.jpg")
-  #  print("2")
-  #  print(im)
-  #  print("3")
-  #  list(src = im)
-  # })
-
 })
 
-
-# # install.packages("imager")
-# library(imager)
-# library(magrittr)
-# im<-load.image("1.jpg")
-# plot(im)
-# x = readImage(system.file("1.jpg", "sample-color.png", package="EBImage"))[257:768,,]
-# display(x)
