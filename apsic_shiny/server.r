@@ -4,20 +4,25 @@
 #install.packages("pdftools")
 #install.packages("readbitmap") 
 
-library(jpeg)
-library(readbitmap)
-library(magick)
-# library(magrittr)
-library(imager)
-#library(pdftools)
-library(readr)
+# library(jpeg)
+# library(readbitmap)
+# library(magick)
+# # library(magrittr)
+# library(imager)
+# #library(pdftools)
+# library(readr)
 library(shiny)
 
 shinyServer(function(input, output){
+  
+  
   output$GS <- renderText(input$gene)
   output$CN <- renderText(input$cancer)
   output$filter <- renderText(input$filter)
   output$rank <- renderText(input$rank)
+  
+  # output$GS <- renderText("TP53")
+  # output$CN <- renderText("Breast:Carcinoma")
   
   # waterfall_plot mutation or copy number
   output$wfplot_Mut_CNV <- renderPlot ( {
