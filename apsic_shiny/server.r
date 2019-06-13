@@ -2,7 +2,8 @@
 #install.packages("magick")
 #install.packages("jpeg")
 #install.packages("pdftools")
-#install.packages("readbitmap") 
+#install.packages("readbitmap")
+# install.packages("ggplot2")
 
 # library(jpeg)
 # library(readbitmap)
@@ -10,7 +11,8 @@
 # # library(magrittr)
 # library(imager)
 # #library(pdftools)
-# library(readr)
+library(readr)
+# library("ggplot2")
 library(shiny)
 
 shinyServer(function(input, output){
@@ -104,7 +106,7 @@ shinyServer(function(input, output){
     A <- paste0("apsic_pvalues/", tmp,"/", tmp, "-amplification-low.csv")
     dat = read.csv(A, row.names = 1)
     dat[input$gene, "pvalue_wt"]
-  
+    
   })
   
   output$p_wt_cancer_mis_low <- renderText ({
@@ -162,7 +164,7 @@ shinyServer(function(input, output){
   }
   
   output$ptable <- renderTable({ 
- 
+    
     
     
     data = data.frame(matrix(ncol=2, nrow=3))
@@ -181,10 +183,10 @@ shinyServer(function(input, output){
     if(is.null(p_value) == FALSE) {
       data[5, ] = c("non-genetic-high", p_value)    
     }
-    print(getPValue(input$gene, input$cancer, "non-genetic-low",  "pvalue_wt"))
-  
+    print(round(getPValue(input$gene, input$cancer, "non-genetic-low",  "pvalue_wt")),3)
+    
     data
-    })
+  })
   
   output$about_us <- renderText({
     # About us

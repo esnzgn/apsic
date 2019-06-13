@@ -1,0 +1,5 @@
+
+
+Dr.Hesam Montazeri is an assistant professor at the Department of Bioinformatics at the University of Tehran, Iran. Hesam studied computer engineering (2000-2004) and machine learning (2004-2006) at Amirkabir University. He then pursued his studies at ETH Zurich in masters of statistics (2009-2011) and PhD in computational biology (2011-2016) with Prof. Niko Beerenwinkel. Before joining the University of Tehran, he was a research assistant at the Harvard University, ETH Zurich, and the University Hospital of Basel. His work is at the interface of statistics, machine learning, and mathematics with biomedical applications. He is mainly interested in developing novel probabilistic graphical models to study complex biomedical problems. His research interests include HIV drug resistance development, phylogenetic analysis of transmission and contact networks, and identification of novel cancer dependencies from large-scale RNA interference experiments.
+
+http://lcbb.ut.ac.ir/
