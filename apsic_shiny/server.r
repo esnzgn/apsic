@@ -282,7 +282,7 @@ shinyServer(function(input, output,session){
       ))
     } else if (input$cancer ==  "Upper_Aerodigestive_Tract:Carcinoma") {
       return(list(
-        src = "body/Oesophagus.png",
+        src = "body/aeroupperdigestive.png",
         contentType = "image/png",width = "100%", height = "100%",
         alt = "Upper_Aerodigestive_Tract:Carcinoma"
       ))
