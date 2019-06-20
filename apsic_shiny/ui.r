@@ -1,4 +1,3 @@
-library(shiny)
 shinyUI(fluidPage(
   titlePanel("APSiC Data Portal"),
   sidebarLayout(
@@ -8,7 +7,7 @@ shinyUI(fluidPage(
                                  radioButtons("filter", label = "Select the filter", 
                                               choiceNames  = list("Mutation", "Copy number"), 
                                               choiceValues = list("mutation", "CNA")))),
-                 fluidRow(class="text-center",column(12,tags$img(src="body.png",width="100%",height="100%")))),
+                 fluidRow(imageOutput("imageBody",width = "100%", height = "120%"))),
     
     
     mainPanel("Gene-Cancer Association",
@@ -34,6 +33,7 @@ shinyUI(fluidPage(
               )
               
     )
+    
   )
 )
 )

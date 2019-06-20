@@ -4,6 +4,7 @@
 #install.packages("pdftools")
 #install.packages("readbitmap")
 # install.packages("ggplot2")
+# install.packages("png")
 
 # library(jpeg)
 # library(readbitmap)
@@ -14,19 +15,27 @@
 library(readr)
 # library("ggplot2")
 library(shiny)
+library(png)
 
-shinyServer(function(input, output){
+shinyServer(function(input, output,session){
+
   
+  # output$addressBody <- renderText({
+  #   if(input$cancer == "Breast:Carcinoma") {
+  #     addressB = "/body/breast.png"
+  #   } 
+  #   if(input$cancer == "Pan cancer") {
+  #     addressB = "/body/body.png"
+  #   }
+  #   if(input$cancer == "Leukemia:ALL") {
+  #     addressB = "/body/blood.png"
+  #   } else (addressB = "/body/body.png")
+  #   addressB
+  # })
   
-  output$GS <- renderText(input$gene)
-  output$CN <- renderText(input$cancer)
-  output$filter <- renderText(input$filter)
-  output$rank <- renderText(input$rank)
-  
-  # output$GS <- renderText("TP53")
-  # output$CN <- renderText("Breast:Carcinoma")
-  
+
   # waterfall_plot mutation or copy number
+  
   output$wfplot_Mut_CNV <- renderPlot ( {
     if(input$cancer == "Pan cancer") {
       selectedData = cancerData
@@ -44,7 +53,6 @@ shinyServer(function(input, output){
     }
   }
   )
-  
   
   # waterfall_plot only_mut
   output$wfplot_only_mut <- renderPlot ( {
@@ -192,5 +200,179 @@ shinyServer(function(input, output){
     # About us
     print(read_file("About_us.txt"))
   })
+  
+  output$imageBody <- renderImage({
+    if (is.null(input$cancer))
+      return(NULL)
+    
+    if (input$cancer == "Breast:Carcinoma") {
+      return(list(
+        src = "body/breast.png",
+        contentType = "image/png",width = "100%", height = "100%",
+        alt = "Breast"
+      ))}
+    
+     else if (input$cancer == "Leukemia:ALL") {
+      return(list(
+        src = "body/blood.png",
+        contentType = "image/png",width = "100%", height = "100%",
+        alt = "Leukemia"
+      ))
+    } else if (input$cancer == "CNS:Glioma_HighGrade") {
+      return(list(
+        src = "body/cns-pns.png",
+        contentType = "image/png",width = "100%", height = "100%",
+        alt = "CNS"
+      ))
+    } else if (input$cancer == "Lung:NSCLC_Large_Cell") {
+      return(list(
+        src = "body/lung.png",
+        contentType = "image/png",width = "100%", height = "100%",
+        alt = "Lung"
+      ))
+    } else if (input$cancer == "Lung:NSCLC_Others") {
+      return(list(
+        src = "body/lung.png",width = "100%", height = "100%",
+        contentType = "image/png",
+        alt = "LUng_others"
+      ))
+    } else if (input$cancer == "Lung:SCLC") {
+      return(list(
+        src = "body/lung.png",width = "100%", height = "100%",
+        contentType = "image/png",
+        alt = "Lung_SC"
+      ))
+    } else if (input$cancer == "PNET:Neuroblastoma") {
+      return(list(
+        src = "body/cns-pns.png",width = "100%", height = "100%",
+        contentType = "image/png",
+        alt = "PNET:Neuroblastoma"
+      ))
+    } else if (input$cancer == "Soft_Tissue:Sarcoma_Rhabdoid") {
+      return(list(
+        src = "body/Soft_Tissue.png",
+        contentType = "image/png",width = "100%", height = "100%",
+        alt = "ST"
+      ))
+    } else if (input$cancer ==  "Bladder:Carcinoma") {
+      return(list(
+        src = "body/Bladder.png",
+        contentType = "image/png",width = "100%", height = "100%",
+        alt = "Bladder"
+      ))
+    } else if (input$cancer ==  "Colorectal:Carcinoma") {
+      return(list(
+        src = "body/Colorectal.png",
+        contentType = "image/png",width = "100%", height = "100%",
+        alt = "Colorectal"
+      ))
+    } else if (input$cancer ==  "Lymphoma:NH_B_cell") {
+      return(list(
+        src = "body/Lymph.png",
+        contentType = "image/jpeg",width = "100%", height = "100%",
+        alt = "Lymphoma:NH_B_cell"
+      ))
+    } else if (input$cancer ==  "Oesophagus:Carcinoma") {
+      return(list(
+        src = "body/Oesophagus.png",
+        contentType = "image/jpeg",width = "100%", height = "100%",
+        alt = "Oesophagus:Carcinoma"
+      ))
+    } else if (input$cancer ==  "Upper_Aerodigestive_Tract:Carcinoma") {
+      return(list(
+        src = "body/Oesophagus.png",
+        contentType = "image/jpeg",width = "100%", height = "100%",
+        alt = "Upper_Aerodigestive_Tract:Carcinoma"
+      ))
+    } else if (input$cancer ==  "Kidney:Carcinoma") {
+      return(list(
+        src = "body/kidney.png",
+        contentType = "image/jpeg",width = "100%", height = "100%",
+        alt = "Kidney:Carcinoma"
+      ))
+    } else if (input$cancer ==  "Leukemia:AML") {
+      return(list(
+        src = "body/blood.png",
+        contentType = "image/jpeg",width = "100%", height = "100%",
+        alt = "Leukemia:AML"
+      ))
+    } else if (input$cancer == "CNS:Glioma") {
+      return(list(
+        src = "body/cns-pns.png",
+        contentType = "image/jpeg",width = "100%", height = "100%",
+        alt = "CNS:Glioma"
+      ))
+    } else if (input$cancer == "Liver:HCC") {
+      return(list(
+        src = "body/liver.png",
+        contentType = "image/jpeg",width = "100%", height = "100%",
+        alt = "Liver:HCC"
+      ))
+    } else if (input$cancer =="Lung:NSCLC_Adeno") {
+      return(list(
+        src = "body/lung.png",
+        contentType = "image/jpeg",width = "100%", height = "100%",
+        alt = "Liver:HCC"
+      ))
+    } else if (input$cancer == "Lung:NSCLC_Squamous") {
+      return(list(
+        src = "body/lung.png",
+        contentType = "image/jpeg",width = "100%", height = "100%",
+        alt = "Lung:NSCLC_Squamous"
+      ))
+    } else if (input$cancer == "Lung:Mesothelioma") {
+      return(list(
+        src = "body/lung.png",
+        contentType = "image/jpeg",width = "100%", height = "100%",
+        alt = "Lung:Mesothelioma"
+      ))
+    } else if (input$cancer == "Ovary:Carcinoma" ) {
+      return(list(
+        src = "body/ovary.png",
+        contentType = "image/jpeg",width = "100%", height = "100%",
+        alt = "Ovary:Carcinoma"
+      ))
+    } else if (input$cancer == "Pancreas:Carcinoma" ) {
+      return(list(
+        src = "body/Pancreas.png",
+        contentType = "image/jpeg",width = "100%", height = "100%",
+        alt = "Pancreas:Carcinoma"
+      ))
+    } else if (input$cancer == "Skin:Melanoma" ) {
+      return(list(
+        src = "body/skin.png",
+        contentType = "image/jpeg",width = "100%", height = "100%",
+        alt = "Skin:Melanoma"
+      ))
+    } else if (input$cancer ==  "Gastric:Carcinoma") {
+      return(list(
+        src = "body/gastric.png",
+        contentType = "image/jpeg",width = "100%", height = "100%",
+        alt = "Gastric:Carcinoma"
+      ))
+    } else if (input$cancer ==  "Thyroid:Carcinoma" ) {
+      return(list(
+        src = "body/Thyroid.png",
+        contentType = "image/jpeg",width = "100%", height = "100%",
+        alt = "Thyroid:Carcinoma"
+      ))
+    } else if (input$cancer ==  "Endometrium:Carcinoma" ) {
+      return(list(
+        src = "body/Ovary.png",
+        contentType = "image/jpeg",width = "100%", height = "100%",
+        alt = "Endometrium:Carcinoma"
+      ))
+    } else if (input$cancer ==  "Pan cancer" ) {
+      return(list(
+        src = "body/body.png",
+        contentType = "image/jpeg",width = "100%", height = "100%",
+        alt = "Pan cancer"
+      ))
+    }
+    
+  }
+  , deleteFile = F)
+  
+  
 })
 
