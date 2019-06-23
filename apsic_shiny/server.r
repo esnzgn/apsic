@@ -173,7 +173,7 @@ shinyServer(function(input, output,session){
     return(NULL)
   }
   
-  output$ptable <- DT::renderDataTable({ 
+  output$ptable <- renderDT({ 
     
     
     
@@ -195,8 +195,9 @@ shinyServer(function(input, output,session){
     }
     print(round(getPValue(input$gene, input$cancer, "non-genetic-low",  "pvalue_wt")),3)
     
-    data
-  })
+    data}
+    , options = list(dom = 't')
+  )
   
   output$about_us <- renderText({
     # About us
@@ -206,6 +207,7 @@ shinyServer(function(input, output,session){
   output$imageBody <- renderImage({
     if (is.null(input$cancer))
       return(NULL)
+    # print(input$cancer)
     
     if (input$cancer == "Breast:Carcinoma") {
       return(list(
@@ -252,7 +254,7 @@ shinyServer(function(input, output,session){
       ))
     } else if (input$cancer == "Soft_Tissue:Sarcoma_Rhabdoid") {
       return(list(
-        src = "body/Soft_Tissue.png",
+        src = "body/soft-tissue.png",
         contentType = "image/png",width = "100%", height = "100%",
         alt = "Soft_Tissue:Sarcoma_Rhabdoid"
       ))
