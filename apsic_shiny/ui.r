@@ -18,7 +18,7 @@ shinyUI(fluidPage(
                                    fluidRow(
                                      column(4, plotOutput("wfplot_only_mut")),
                                      column(4, plotOutput("barChart")), 
-                                     column( DTOutput("ptable"), width= 4,height= 4))),
+                                     column( dataTableOutput("ptable"), width= 4,height= 4))),
                           
                           # tabPanel("Chromose Karyoplots",tags$label("tabPanel('Chromose Karyoplots',tags$img(src = paste0('/', '/figures/Karyotype', cancer_type))")),
                           # navbarMenu("APSIC",

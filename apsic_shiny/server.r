@@ -19,6 +19,7 @@ library(shiny)
 library(png)
 library(DT)
 
+
 shinyServer(function(input, output,session){
 
   
@@ -173,7 +174,7 @@ shinyServer(function(input, output,session){
     return(NULL)
   }
   
-  output$ptable <- renderDT({ 
+  output$ptable <- renderDataTable({ 
     
     
     
