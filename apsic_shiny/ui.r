@@ -1,17 +1,16 @@
 shinyUI(fluidPage(
   titlePanel("APSiC Data Portal"),
   sidebarLayout(
-    sidebarPanel(fluidRow(column(12,("Enter gene/cancer information"),
+    sidebarPanel(fluidRow(column(12,
                                  selectInput("gene",   "please select gene symbol", choices = rownames(cancerData$viabilities),selected = "TP53"),
                                  selectInput("cancer", "Please select cancer type", choices = c("Pan cancer", cancer_types),selected = "Breast:Carcinoma"),
                                  radioButtons("filter", label = "Select the filter", 
                                               choiceNames  = list("Mutation", "Copy number"), 
                                               choiceValues = list("mutation", "CNA")))),
-                 fluidRow(imageOutput("imageBody",width = "100%", height = "120%"))),
+                 fluidRow(imageOutput("imageBody",width = "80%", height = "100%"),class="center"), width=3),
     
     
-    mainPanel("Gene-Cancer Association",
-              tabsetPanel(type = "tab",
+    mainPanel(tabsetPanel(type = "tab",
                           tabPanel("Water-fall plots",
                                    fluidRow(
                                      column(6, plotOutput("wfplot_only_wt")),

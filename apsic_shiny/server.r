@@ -168,7 +168,7 @@ shinyServer(function(input, output,session){
     A <- paste0("apsic_pvalues/", tmp,"/", tmp, "-", alter_type, ".csv")
     if(file.exists(A)) {
       dat = read.csv(A, row.names = 1)
-      return(dat[gene, ptype])
+      return(round(-log10(dat[gene, ptype]),2))
     }
     return(NULL)
   }
@@ -178,20 +178,20 @@ shinyServer(function(input, output,session){
     
     
     data = data.frame(matrix(ncol=2, nrow=3))
-    colnames(data) = c("Type", "P Value")
+    colnames(data) = c("Type", "-log10(p-value)")
     
-    data[1, ] = c("amplification-low", getPValue(input$gene, input$cancer, "amplification-low",  "pvalue_mut") )
-    data[2, ] = c("missense-low", getPValue(input$gene, input$cancer, "missense-low",  "pvalue_mut")) 
-    data[3, ] = c("truncating-high", getPValue(input$gene, input$cancer, "truncating-high",  "pvalue_mut")) 
+    data[1, ] = c("amplification oncogene", getPValue(input$gene, input$cancer, "amplification-low",  "pvalue_mut") )
+    data[2, ] = c("mutation oncogene", getPValue(input$gene, input$cancer, "missense-low",  "pvalue_mut")) 
+    data[3, ] = c("mutation tumor suppressor", getPValue(input$gene, input$cancer, "truncating-high",  "pvalue_mut")) 
     
     p_value = getPValue(input$gene, input$cancer, "non-genetic-low",  "pvalue_wt")
     if(is.null(p_value) == FALSE) {
-      data[4, ] = c("non-genetic-low", p_value)    
+      data[4, ] = c("non-genetic tumor suppressor", p_value)    
       
     }
     p_value = getPValue(input$gene, input$cancer, "non-genetic-high",  "pvalue_wt")
     if(is.null(p_value) == FALSE) {
-      data[5, ] = c("non-genetic-high", p_value)    
+      data[5, ] = c("non-genetic oncogene", p_value)    
     }
     print(round(getPValue(input$gene, input$cancer, "non-genetic-low",  "pvalue_wt")),3)
     
