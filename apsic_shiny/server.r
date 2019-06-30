@@ -95,7 +95,7 @@ shinyServer(function(input, output,session){
       waterfallForGene(selectedData, gene = input$gene, title=paste0(input$gene,": wild type cell lines"), rank=TRUE, legenedPos="bottomleft",
                        cols=NULL, type = "only_wt", sig_alpha = NA)
     } else if (input$filter == "CNA") {
-      waterfallForGene_CNA(selectedData, gene = input$gene, title=paste0(input$gene,": Wild type cell lines"), rank=TRUE, legenedPos="bottomleft",
+      waterfallForGene_CNA(selectedData, gene = input$gene, title=paste0(input$gene,": wild type cell lines"), rank=TRUE, legenedPos="bottomleft",
                            cols=NULL, type = "only_wt", sig_alpha = NA)
     }
   }
