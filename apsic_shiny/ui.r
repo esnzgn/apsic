@@ -10,7 +10,7 @@ shinyUI(fluidPage(
                  fluidRow(imageOutput("imageBody",width = "80%", height = "100%"),class="center"), width=3),
     
     
-    mainPanel(tabsetPanel(type = "tab",
+    mainPanel(tabsetPanel( type = "tab",
                           tabPanel("Water-fall plots",
                                    fluidRow(
                                      column(6, plotOutput("wfplot_only_wt")),
@@ -18,7 +18,7 @@ shinyUI(fluidPage(
                                    fluidRow(
                                      column(4, plotOutput("wfplot_only_mut")),
                                      column(4, plotOutput("barChart")), 
-                                     column( dataTableOutput("ptable"), width= 4,height= 4))),
+                                     column( DT::dataTableOutput("ptable"), width= 4,height= 4))),
                           
                           # tabPanel("Chromose Karyoplots",tags$label("tabPanel('Chromose Karyoplots',tags$img(src = paste0('/', '/figures/Karyotype', cancer_type))")),
                           # navbarMenu("APSIC",

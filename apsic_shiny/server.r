@@ -6,6 +6,7 @@
 # install.packages("ggplot2")
 # install.packages("png")
 # install.packages("DT")
+# install.packages(shinyWidgets)
 
 # library(jpeg)
 # library(readbitmap)
@@ -18,6 +19,7 @@ library(readr)
 library(shiny)
 library(png)
 library(DT)
+# library(shinyWidgets)
 
 
 shinyServer(function(input, output,session){
@@ -98,8 +100,10 @@ shinyServer(function(input, output,session){
   )
   
   
-  output$barChart <- renderPlot ( {
+  output$barChart <- renderPlot ({
     # load tcga data barChart
+    
+    
     cancer_type = input$cancer
     cancerToTCGA_data = read.csv("CelllinesToTumorTypes.csv", stringsAsFactors = FALSE)
     rownames(cancerToTCGA_data) = cancerToTCGA_data$Celllines
@@ -108,6 +112,14 @@ shinyServer(function(input, output,session){
       load(paste0("tcga/", tmp, ".RData"))
       boxplot_gene(tcga_data, input$gene)
     }
+    ##########################################################################################################################################
+    ##########################################################################################################################################
+    ##########################################################################################################################################
+    ##########################################################################################################################################
+    if (input$cancer =="pan cancer"){
+      return(NULL)
+    }
+    
   }
   )
   
@@ -174,7 +186,7 @@ shinyServer(function(input, output,session){
     return(NULL)
   }
   
-  output$ptable <- renderDataTable({ 
+  output$ptable <- DT::renderDataTable({ 
     
     
     
@@ -196,7 +208,15 @@ shinyServer(function(input, output,session){
     }
     print(round(getPValue(input$gene, input$cancer, "non-genetic-low",  "pvalue_wt")),3)
     
-    data}
+    #############################################################################################################################################
+    #############################################################################################################################################
+    #############################################################################################################################################
+    #############################################################################################################################################
+    #############################################################################################################################################
+    if (input$cancer == "pan cancer"){
+      return(NULL)
+    }else {return(data)}
+    }
     , options = list(dom = 't')
   )
   
