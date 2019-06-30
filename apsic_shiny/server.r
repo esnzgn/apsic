@@ -52,10 +52,10 @@ shinyServer(function(input, output,session){
     }
     
     if(input$filter == "mutation") {
-      waterfallForGene(selectedData, gene = input$gene, title=paste0(input$gene,": all celllines"), rank=TRUE, legenedPos="bottomleft",
+      waterfallForGene(selectedData, gene = input$gene, title=paste0(input$gene,": all cell lines"), rank=TRUE, legenedPos="bottomleft",
                        cols=NULL, type = "all", sig_alpha = NA)
     } else if (input$filter == "CNA") {
-      waterfallForGene_CNA(selectedData, gene = input$gene, title=paste0(input$gene,": all celllines"), rank=TRUE, legenedPos="bottomleft",
+      waterfallForGene_CNA(selectedData, gene = input$gene, title=paste0(input$gene,": all cell lines"), rank=TRUE, legenedPos="bottomleft",
                            cols=NULL, type = "all", sig_alpha = NA)
     }
   }
@@ -71,10 +71,10 @@ shinyServer(function(input, output,session){
     }
     
     if(input$filter == "mutation") {
-      waterfallForGene(selectedData, gene = input$gene, title=paste0(input$gene,": altered celllines"), rank=TRUE, legenedPos="bottomleft",
+      waterfallForGene(selectedData, gene = input$gene, title=paste0(input$gene,": altered cell lines"), rank=TRUE, legenedPos="bottomleft",
                        cols=NULL, type = "only_mut", sig_alpha = NA)
     } else if (input$filter == "CNA") {
-      waterfallForGene_CNA(selectedData, gene = input$gene, title=paste0(input$gene,": altered celllines"), rank=TRUE, legenedPos="bottomleft",
+      waterfallForGene_CNA(selectedData, gene = input$gene, title=paste0(input$gene,": altered cell lines"), rank=TRUE, legenedPos="bottomleft",
                            cols=NULL, type = "only_cna", sig_alpha = NA)
     }
   }
@@ -92,10 +92,10 @@ shinyServer(function(input, output,session){
     }
     
     if(input$filter == "mutation") {
-      waterfallForGene(selectedData, gene = input$gene, title=paste0(input$gene,": wild type celllines"), rank=TRUE, legenedPos="bottomleft",
+      waterfallForGene(selectedData, gene = input$gene, title=paste0(input$gene,": wild type cell lines"), rank=TRUE, legenedPos="bottomleft",
                        cols=NULL, type = "only_wt", sig_alpha = NA)
     } else if (input$filter == "CNA") {
-      waterfallForGene_CNA(selectedData, gene = input$gene, title=paste0(input$gene,": wild type celllines"), rank=TRUE, legenedPos="bottomleft",
+      waterfallForGene_CNA(selectedData, gene = input$gene, title=paste0(input$gene,": Wild type cell lines"), rank=TRUE, legenedPos="bottomleft",
                            cols=NULL, type = "only_wt", sig_alpha = NA)
     }
   }
