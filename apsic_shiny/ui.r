@@ -14,7 +14,8 @@ shinyUI(fluidPage(
                           tabPanel("Water-fall plots",
                                    fluidRow(
                                      column(6, plotOutput("wfplot_only_wt")),
-                                     column(6, plotOutput("wfplot_Mut_CNV"))), 
+                                     column(6, plotOutput("wfplot_Mut_CNV"))),
+                                   tags$label(""), 
                                    fluidRow(
                                      column(4, plotOutput("wfplot_only_mut")),
                                      column(4, plotOutput("barChart")), 

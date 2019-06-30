@@ -6,7 +6,8 @@
 # install.packages("ggplot2")
 # install.packages("png")
 # install.packages("DT")
-# install.packages(shinyWidgets)
+# install.packages("shinydashboard")
+# install.packages("shinyWidgets")
 
 # library(jpeg)
 # library(readbitmap)
@@ -19,6 +20,7 @@ library(readr)
 library(shiny)
 library(png)
 library(DT)
+# library(shinydashboard)
 # library(shinyWidgets)
 
 
@@ -50,10 +52,10 @@ shinyServer(function(input, output,session){
     }
     
     if(input$filter == "mutation") {
-      waterfallForGene(selectedData, gene = input$gene, title=input$gene, rank=TRUE, legenedPos="bottomleft",
+      waterfallForGene(selectedData, gene = input$gene, title=paste0("Mixed waterfall plot of Gene",input$gene), rank=TRUE, legenedPos="bottomleft",
                        cols=NULL, type = "all", sig_alpha = NA)
     } else if (input$filter == "CNA") {
-      waterfallForGene_CNA(selectedData, gene = input$gene, title=input$gene, rank=TRUE, legenedPos="bottomleft",
+      waterfallForGene_CNA(selectedData, gene = input$gene, title=paste0("Mixed waterfall plot of Gene",input$gene), rank=TRUE, legenedPos="bottomleft",
                            cols=NULL, type = "all", sig_alpha = NA)
     }
   }
@@ -69,10 +71,10 @@ shinyServer(function(input, output,session){
     }
     
     if(input$filter == "mutation") {
-      waterfallForGene(selectedData, gene = input$gene, title=input$gene, rank=TRUE, legenedPos="bottomleft",
+      waterfallForGene(selectedData, gene = input$gene, title=paste0("Mutation waterfall plot of Gene",input$gene), rank=TRUE, legenedPos="bottomleft",
                        cols=NULL, type = "only_mut", sig_alpha = NA)
     } else if (input$filter == "CNA") {
-      waterfallForGene_CNA(selectedData, gene = input$gene, title=input$gene, rank=TRUE, legenedPos="bottomleft",
+      waterfallForGene_CNA(selectedData, gene = input$gene, title=paste0("Mutation waterfall plot of Gene",input$gene), rank=TRUE, legenedPos="bottomleft",
                            cols=NULL, type = "only_cna", sig_alpha = NA)
     }
   }
@@ -90,10 +92,10 @@ shinyServer(function(input, output,session){
     }
     
     if(input$filter == "mutation") {
-      waterfallForGene(selectedData, gene = input$gene, title=input$gene, rank=TRUE, legenedPos="bottomleft",
+      waterfallForGene(selectedData, gene = input$gene, title=paste0("Wild type waterfall plot of Gene",input$gene), rank=TRUE, legenedPos="bottomleft",
                        cols=NULL, type = "only_wt", sig_alpha = NA)
     } else if (input$filter == "CNA") {
-      waterfallForGene_CNA(selectedData, gene = input$gene, title=input$gene, rank=TRUE, legenedPos="bottomleft",
+      waterfallForGene_CNA(selectedData, gene = input$gene, title=paste0("Wild type waterfall plot of Gene",input$gene), rank=TRUE, legenedPos="bottomleft",
                            cols=NULL, type = "only_wt", sig_alpha = NA)
     }
   }
