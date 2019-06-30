@@ -11,13 +11,13 @@ shinyUI(fluidPage(
     
     
     mainPanel(tabsetPanel( type = "tab",
-                          tabPanel("Water-fall plots",
+                          tabPanel("Waterfall plots",
                                    fluidRow(
                                      column(6, plotOutput("wfplot_only_wt")),
-                                     column(6, plotOutput("wfplot_Mut_CNV"))),
+                                     column(6, plotOutput("wfplot_only_mut"))),
                                    tags$label(""), 
                                    fluidRow(
-                                     column(4, plotOutput("wfplot_only_mut")),
+                                     column(4, plotOutput("wfplot_Mut_CNV")),
                                      column(4, plotOutput("barChart")), 
                                      column( DT::dataTableOutput("ptable"), width= 4,height= 4))),
                           
