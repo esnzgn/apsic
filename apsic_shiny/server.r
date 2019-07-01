@@ -201,12 +201,12 @@ shinyServer(function(input, output,session){
     
     p_value = getPValue(input$gene, input$cancer, "non-genetic-low",  "pvalue_wt")
     if(is.null(p_value) == FALSE) {
-      data[4, ] = c("Non-genetic tumor suppressor", p_value)    
+      data[4, ] = c("Non-genetic oncogene", p_value)    
       
     }
     p_value = getPValue(input$gene, input$cancer, "non-genetic-high",  "pvalue_wt")
     if(is.null(p_value) == FALSE) {
-      data[5, ] = c("Non-genetic oncogene", p_value)    
+      data[5, ] = c("Non-genetic tumor suppressor", p_value)    
     }
     print(round(getPValue(input$gene, input$cancer, "non-genetic-low",  "pvalue_wt")),3)
     
