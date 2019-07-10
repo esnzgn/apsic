@@ -151,7 +151,7 @@ plotInChromosomeContext <- function(candidGenes, geneAnnot, fname) {
     }
   }
   kpPlotMarkers(kp, data=genes[ids, ], labels=tmp_genes, r1 = 0.6, cex=0.65, text.orientation = "horizontal", data.panel = 2, label.color=colors2, font=3)
-  legend("bottomright", legend=c("nongen_high #", "nongen_low *", "gen_missense @","gen_amplification $", "gen_truncating %", "multiple modifications: #,*,@,$,%"), 
+  legend("bottomright", legend=c("Non-genetic tumor suppersor", "Non-genetic oncogene", "Mutation oncogene","Amplification oncogene", "Mutation tumor suppersor", "Multiple potential drivers"), 
          col=c("orange", "green", "purple", "blue", "red", "Black"), cex=1, lty=1, lwd=2)
 }
 
