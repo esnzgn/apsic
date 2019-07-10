@@ -1,108 +1,72 @@
 rm(list=ls())
-library(pheatmap)
-library(reshape2)
-library(ggplot2)
-library(scales)
+library(pvclust)
+source("common_functions.r")
 
-set.seed(1000)
-driverGenesPanCancer <-  function() {
-  cancer_type = "Pan_cancer"
-  
-  # missense
-  dat_missense = read.csv(paste0("../apsic_shiny/apsic_pvalues/", cancer_type, "/", cancer_type, 
-                                 "-missense-low.csv"), stringsAsFactors = FALSE, row.names = 1)
-  n = sum(dat_missense$freq_mut > 10)
-  gene_set3 = dat_missense[which(dat_missense$pvalue_mut < 1/n & dat_missense$pvalue_wt > 0.05), "gene"]
-  
-  # gene_set3 = dat_missense$gene[sample(nrow(dat_missense), 30)]
-  
-  # amplification
-  dat_amplification = read.csv(paste0("../apsic_shiny/apsic_pvalues/", cancer_type, "/", cancer_type, 
-                                      "-amplification-low.csv"), stringsAsFactors = FALSE, row.names = 1)
-  n = sum(dat_amplification$freq_mut > 10)
-  gene_set4 = dat_amplification[which(dat_amplification$pvalue_mut < 1/n & dat_amplification$pvalue_wt > 0.05), "gene"]
-  # gene_set4 = gene_set3
-  
-  # truncating
-  dat_truncating = read.csv(paste0("../apsic_shiny/apsic_pvalues/", cancer_type, "/", cancer_type, 
-                                   "-truncating-high.csv"), stringsAsFactors = FALSE, row.names = 1)
-  n = sum(dat_truncating$freq_mut > 10)
-  gene_set5 = dat_truncating[which(dat_truncating$pvalue_mut < 1/n & dat_truncating$pvalue_wt > 0.05), "gene"]
-  # gene_set5 = gene_set3
-  
-  gene_names = unique(c(gene_set3, gene_set4, gene_set5) )
-  
-  pvalues = cbind(dat_missense[gene_names, "pvalue_mut"], dat_truncating[gene_names, "pvalue_mut"],
-                  dat_amplification[gene_names, "pvalue_mut"])
-  pvalues[is.na(pvalues)] = 1
-  colnames(pvalues) = c("missense", "truncating", "amplification")
-  rownames(pvalues) = gene_names
-  pvalues[order(pvalues[, 1]),]
-}
+fig_folder = "figures/fig2/"
+dir.create(fig_folder, recursive = T, showWarnings = FALSE)
 
+##### we first load all p-value files
+cancers = list.files("../apsic_shiny/apsic_pvalues/")
+cancers = cancers[-which(cancers == "Pan_cancer")]
 
+pvalues = prepareNongeneticPvalueData("non-genetic-high", cancers)
 
+################# clustering cancer subtypes according to the p-values ###############################
+######################################################################################################
+### first select 200 genes with highly variable p-values among subtypes
+sorted_genes = sort(apply(pvalues, 1, var), decreasing = TRUE)
+genes = names(sorted_genes)[1:200]
+dat = pvalues[genes, ]
 
-prepareTCGADataMatrix <- function(direction) {
-  pvalues = driverGenesPanCancer()
-  folder = "../apsic_shiny/tcga/"
-  fnames = list.files(folder)
-  
-  fname = fnames[1]
-  gene_names = rownames(pvalues)
-  for(fname in fnames) {
-    fullName = paste0(folder, fname)
+# select NA values to 1, if any. (In our case, there is no NA p-value so the following command has no impact)
+dat[which(is.na(dat))] = 1.0
 
-    load(fullName)
-    print(paste(fname, ncol(tcga_data$tumor_count), ncol(tcga_data$normal_count)))
-          
-    if(direction == "low") {
-      pvalues = cbind(pvalues, tcga_data$pvalues[gene_names, 1])  
-    } else{
-      pvalues = cbind(pvalues, tcga_data$pvalues[gene_names, 2])  
-    }
-  }
-  
-  pvalues[is.nan(pvalues)] = 1.0
-  
-  tmp = unname(sapply(fnames, function(x) { 
-    x = substring(x, 6 )
-    substring(x, 0, nchar(x)-6)} ))
-  names(tmp) = tmp
-  tmp["COADTCGA-READ"] = "COAD/READ"
-  tmp["KIRCTCGA-KIRP"] = "KIRC/KIRP"
-  
-  colnames(pvalues)[4:ncol(pvalues)] = tmp
-  pvalues
-}
+# clustering with 10000 bootstraps 
+result = pvclust(dat, method.dist="cor", method.hclust="ward.D2", nboot=10000)
 
-plotHeatmap <- function(dat) {
-  
-  dat = dat[rev(rownames(dat)),]
-  
-  dat.m = melt(dat)
-  names(dat.m) <- c("gene", "type", "pvalue")
-  dat.m$pvalue[dat.m$pvalue < 10^(-20)] = 10^(-20)
-  handle = ggplot(dat.m, aes(type, gene)) +
-    geom_tile(aes(fill = pvalue), color = "white") + 
-    scale_fill_gradientn(values=rescale(c(10^(-20), 10^(-5), 0.001,  1)), colours=c("red3", "red2", "red1",  "white") ) +
-    ylab("") +
-    xlab("") +
-    theme_bw()+
-    theme(plot.title = element_text(size=16),
-          axis.title=element_text(size=14,face="bold"),
-          axis.text.x = element_text(angle = 90, hjust = 1),
-          legend.position = "none") 
-  print(handle)
-}
-
-head(data_low)
-
-data_low = prepareTCGADataMatrix("low")
-plotHeatmap(data_low)
-
-data_high = prepareTCGADataMatrix("high")
-
-pdf("figures/fig2.pdf")
-plotHeatmap(data_high)
+pdf(paste0(fig_folder, "types-cluster.pdf"), width=10, height=8)
+plot(result)
+pvrect(result, alpha=0.9)
 dev.off()
+
+# now we reorder subtypes according to the hierarchical clustering
+clusters = hclust(get_dist(t(dat), method = "pearson"), method= "ward.D2")
+plot(clusters)
+cancers = clusters$labels[clusters$order]
+save(cancers, file="ordered_cancers.RData")
+
+
+################################## heatmap for 5 top genes per cancer ###############################
+#####################################################################################################
+rm(list=ls())
+source("common_functions.r")
+load("ordered_cancers.RData")
+
+fig_folder = "figures/fig2/"
+feature_type = "non-genetic-high"
+pvalues = prepareNongeneticPvalueData(feature_type, cancers)
+topGenes = selectImportantNongeneticGenes(feature_type, cancers, 5, TRUE)
+pvalues = pvalues[topGenes, ]
+
+pdf(paste0(fig_folder, feature_type, ".pdf"), 8, 12)
+plotHeatmap(-log10(pvalues) )
+dev.off()
+
+png(paste0(fig_folder, feature_type, ".png"), width = 8, height = 12, units = 'in', res = 300)
+plotHeatmap(-log10(pvalues) )
+dev.off()
+
+
+feature_type = "non-genetic-low"
+pvalues = prepareNongeneticPvalueData(feature_type, cancers)
+topGenes = selectImportantNongeneticGenes(feature_type, cancers, 5, TRUE)
+pvalues = pvalues[topGenes, ]
+
+pdf(paste0(fig_folder, feature_type, ".pdf"), 8, 12)
+plotHeatmap(-log10(pvalues) )
+dev.off()
+
+png(paste0(fig_folder, feature_type, ".png"), width = 8, height = 12, units = 'in', res = 300)
+plotHeatmap(-log10(pvalues) )
+dev.off()
+

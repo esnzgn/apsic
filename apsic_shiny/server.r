@@ -199,8 +199,7 @@ shinyServer(function(input, output,session){
         if(!is.na(pvalue_less)) 
           pvalue = round(-log10(min(pvalue_less, pvalue_more) ),2)
       }
-      return(list(pvalue = pvalue, 
-                  pvalue_less < pvalue_more))
+      return(list(pvalue = pvalue))
     }
     return(NULL)
   }
