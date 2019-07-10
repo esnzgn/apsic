@@ -25,7 +25,6 @@ library(DT)
 
 
 shinyServer(function(input, output,session){
-
   
   # output$addressBody <- renderText({
   #   if(input$cancer == "Breast:Carcinoma") {
@@ -43,7 +42,7 @@ shinyServer(function(input, output,session){
 
   # waterfall_plot mutation or copy number
   
-  output$wfplot_Mut_CNV <- renderPlot ( {
+  output$wfplot_Mut_CNV <- renderPlot ({
     if(input$cancer == "Pan cancer") {
       selectedData = cancerData
       
@@ -58,8 +57,7 @@ shinyServer(function(input, output,session){
       waterfallForGene_CNA(selectedData, gene = input$gene, title=paste0(input$gene,": all cell lines"), rank=TRUE, legenedPos="bottomleft",
                            cols=NULL, type = "all", sig_alpha = NA)
     }
-  }
-  )
+  })
   
   # waterfall_plot only_mut
   output$wfplot_only_mut <- renderPlot ( {
