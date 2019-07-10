@@ -13,8 +13,8 @@ annotateGene <- function(candidGenes){
   rownames(x) = genes
   colnames(x) <- c("nongen_high","nongen_low","gen_missense","gen_amplification","gen_truncating","color","label")
   x = data.frame(x)
-
-    gene = 1
+  
+  gene = 1
   for (gene in genes){
     if (gene %in% candidGenes$nongen_high){
       x[gene, "nongen_high"] = 1
@@ -32,7 +32,7 @@ annotateGene <- function(candidGenes){
       x[gene,"gen_truncating"] = 1
     }
   }
-    
+  
   ############################################################################
   ########################### Color identification ###########################
   ############################################################################
@@ -45,7 +45,7 @@ annotateGene <- function(candidGenes){
     }
     else{
       if (x[gene, "nongen_high"] == 1 ){
-      x[gene,"color"] = "orange"}
+        x[gene,"color"] = "orange"}
       if (x[gene, "nongen_low"] == 1 ){
         x[gene,"color"] = "green"}
       if (x[gene, "gen_missense"] == 1 ){
@@ -172,7 +172,7 @@ candidateGenes  <- function(cancer_type ) {
     n = sum(dat$freq_wt > minNrOfCelllines)
     gene_set1 = dat[which(dat$pvalue_wt < 1/n & dat$tumor_expressed_less <0.05), "gene"]
   }
-
+  
   # non-genetic low
   fname = paste0("../apsic_shiny/apsic_pvalues/", cancer_type, "/", cancer_type, 
                  "-non-genetic-low.csv")
@@ -187,7 +187,7 @@ candidateGenes  <- function(cancer_type ) {
                         "-missense-low.csv"), stringsAsFactors = FALSE)
   n = sum(dat$freq_mut > minNrOfCelllines)
   gene_set3 = dat[which(dat$pvalue_mut < 1/n & dat$pvalue_wt > 0.05), "gene"]
-
+  
   # amplification
   dat = read.csv(paste0("../apsic_shiny/apsic_pvalues/", cancer_type, "/", cancer_type, 
                         "-amplification-low.csv"), stringsAsFactors = FALSE)
@@ -224,10 +224,10 @@ for(fname in file_names){
   dev.off()
 }
 
-pdf(paste0(output_folder, "All_cancers", ".pdf"), 10, 15,  onefile=TRUE)
-for(fname in file_names) {
-  candidGenes = candidateGenes(fname)
-  plotInChromosomeContext(candidGenes, geneAnnot, fname)
-}
+# pdf(paste0(output_folder, "All_cancers", ".pdf"), 10, 15,  onefile=TRUE)
+# for(fname in file_names) {
+#   candidGenes = candidateGenes(fname)
+#   plotInChromosomeContext(candidGenes, geneAnnot, fname)
+# }
 
-dev.off()
+# dev.off()
