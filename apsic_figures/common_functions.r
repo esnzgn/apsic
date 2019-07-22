@@ -8,7 +8,7 @@ library(metap)
 
 
 allGenes <- function(cancer) {
-  feature_type = "non-genetic-high"
+  feature_type = "non-genetic-tumor_suppressor"
   gene_names = c()
   # for(cancer in cancers) {
   dat = read.csv(paste0("../apsic_shiny/apsic_pvalues/", cancer, "/", cancer, 
@@ -24,8 +24,9 @@ selectImportantNongeneticGenes <- function(feature_type, cancers, nrGenesPerCanc
   for(cancer in cancers) {
     dat = read.csv(paste0("../apsic_shiny/apsic_pvalues/", cancer, "/", cancer, 
                           "-",feature_type, ".csv"), stringsAsFactors = FALSE, row.names = 1,header = TRUE)
-    
-    gene_names = c(gene_names, head(dat[order(as.numeric(dat$pvalue_wt), decreasing = F), "gene" ], nrGenesPerCancer) )
+
+    topGeneRows = head(dat[order(as.numeric(dat$pvalue), decreasing = F), ], nrGenesPerCancer)     
+    gene_names = c(gene_names, rownames(topGeneRows))
   }
   if(removeDuplicates){
     return(unique(gene_names))  
@@ -45,12 +46,10 @@ prepareNongeneticPvalueData <- function(feature_type, cancers) {
   for(cancer in cancers) {
     dat = read.csv(paste0("../apsic_shiny/apsic_pvalues/", cancer, "/", cancer,
                           "-",feature_type, ".csv"), stringsAsFactors = FALSE, row.names = 1,header = TRUE)
-    pvalues[, i] = dat[gene_names,"pvalue_wt"]
+    pvalues[, i] = dat[gene_names, "pvalue"]
     
     i = i+1
   }
-  # pvalues = pvalues[order(pvalues[, "Pan_cancer"], decreasing = FALSE), ]
-  # pvalues[is.na(pvalues)] = 1.0
   pvalues
 }
 
@@ -72,14 +71,20 @@ plot_cluster=function(data, var_cluster, palette)
     scale_colour_brewer(palette = palette) 
 }
 
-
-
 plotHeatmap <- function(dat) {
   dat = dat[rev(rownames(dat)),]
   
-  dat.m = melt(dat)
+  dat = data.frame(dat)
+  dat$gene = rownames(dat)
+  
+  dat.m = melt(dat, id.vars = "gene")
   names(dat.m) <- c("gene", "type", "pvalue")
+  
+  mylevels <- rownames(dat)
+  dat.m$gene <- factor(dat.m$gene,levels=mylevels)
+  
   dat.m$pvalue[dat.m$pvalue > 20] = 20
+  
   handle = ggplot(dat.m, aes(type, gene),font=3) +
     geom_tile(aes(fill = pvalue), color = "white") + 
     scale_fill_gradientn(name = expression(-log[10](p-value)), values=rescale(c(0, log10(0.05), 3, 5, 10, 20)), colours= c( "white",  "white",  "orange", "red1", "red2", "black")) +
@@ -91,10 +96,7 @@ plotHeatmap <- function(dat) {
           axis.text.y = element_text(size=7, face="italic"),
           axis.text.x = element_text(angle = 45, hjust = 1),
           legend.position = "right")
-  
-  
+
   print(handle)
   
 }
-
-
