@@ -156,7 +156,7 @@ plotInChromosomeContext <- function(candidGenes, geneAnnot, fname) {
 }
 
 candidateGenes  <- function(cancer_type ) {
-
+  
   dat = read.csv(paste0("../apsic_shiny/apsic_pvalues/", cancer_type, "/", cancer_type, 
                         "-mutation-oncogene.csv"), stringsAsFactors = FALSE)
   
@@ -193,7 +193,7 @@ candidateGenes  <- function(cancer_type ) {
   n = sum(dat$X.mut > minNrOfCelllines)
   indexes = which(dat$pvalue < min(1/n, 0.05))
   gene_set3 = row.names(dat)[indexes]
-
+  
   # amplification
   dat = read.csv(paste0("../apsic_shiny/apsic_pvalues/", cancer_type, "/", cancer_type, 
                         "-amplification-oncogene.csv"), stringsAsFactors = FALSE, row.names = 1)
@@ -209,7 +209,7 @@ candidateGenes  <- function(cancer_type ) {
   n = sum(dat$X.mut > minNrOfCelllines)
   indexes = which(dat$pvalue < min(1/n, 0.05))
   gene_set5 = row.names(dat)[indexes]
-
+  
   list(nongen_high=gene_set1, nongen_low=gene_set2, gen_missense=gene_set3, 
        gen_amplification=gene_set4, gen_truncating=gene_set5)
 }
@@ -225,7 +225,7 @@ file_names <- file_names[-which(file_names == "Pan_cancer")]
 
 nr_elem_candidate_genes <- function(candidGenes) {
   return(length(candidGenes$nongen_high) + length(candidGenes$nongen_low) + length(candidGenes$gen_missense) +
-  length(candidGenes$gen_amplification) + length(candidGenes$gen_truncating))
+           length(candidGenes$gen_amplification) + length(candidGenes$gen_truncating))
 }
 
 for(fname in file_names){
