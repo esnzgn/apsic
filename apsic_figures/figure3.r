@@ -3,10 +3,8 @@ library(karyoploteR)
 
 annotateGene <- function(candidGenes){
   
-  ##################################################################################################
+
   ##################################### redundency Matrix scan #####################################
-  ##################################################################################################
-  
   genes = unique(unname(unlist(candidGenes)))
   
   x <- matrix(0, nrow = length(genes), ncol = 7)
@@ -33,9 +31,8 @@ annotateGene <- function(candidGenes){
     }
   }
   
-  ############################################################################
+  
   ########################### Color identification ###########################
-  ############################################################################
   gene = 1
   for (gene in genes){
     x[gene,"label"] = rownames(x[gene,])
@@ -56,10 +53,9 @@ annotateGene <- function(candidGenes){
         x[gene,"color"] = "red"}
     }
   }
-  ############################################################################
-  ########################### label modifier ###########################
-  ############################################################################
   
+  
+  ########################### label modifier ###########################
   gene = 1
   for (gene in genes){
     if (x[gene, "color"] == "black" ){
@@ -91,6 +87,7 @@ annotateGene <- function(candidGenes){
 }
 
 plotInChromosomeContext <- function(candidGenes, geneAnnot, fname) {
+  # fname = "Bladder_Carcinoma"
   plot_title = fname
   
   gene_names = candidGenes
@@ -110,7 +107,7 @@ plotInChromosomeContext <- function(candidGenes, geneAnnot, fname) {
   allChromo = c(1:22, "X", "Y")
   u_chros = allChromo[which(allChromo %in% char_element)]
   
-  kp <- plotKaryotype(genome="hg38", plot.type = 2, chromosomes=paste0("chr",u_chros), main= plot_title )
+  kp <- plotKaryotype(genome="hg38", plot.type = 2, chromosomes=c(paste0("chr",1:22), "chrX"), main= plot_title )
   
   n = length(genes@seqnames)
   
@@ -150,84 +147,95 @@ plotInChromosomeContext <- function(candidGenes, geneAnnot, fname) {
       tmp_genes[i] = gene_names$label[i*2-1]
     }
   }
+  
+    
   kpPlotMarkers(kp, data=genes[ids, ], labels=tmp_genes, r1 = 0.6, cex=0.65, text.orientation = "horizontal", data.panel = 2, label.color=colors2, font=3)
-  legend("bottomright", legend=c("Non-genetic tumor suppersor", "Non-genetic oncogene", "Mutation oncogene","Amplification oncogene", "Mutation tumor suppersor", "Multiple potential drivers"), 
+  legend("bottomright", legend=c(paste0("Non-genetic tumor suppersor (",length(candidGenes$nongen_high),")"),paste0("Non-genetic oncogene (",sum(candidGenes$nongen_low),")"),paste0("Mutation oncogene (",sum(candidGenes$gen_missense),")"),paste0("Amplification oncogene (",sum(candidGenes$gen_amplification),")"),paste0("Mutation tumor suppersor (",sum(candidGenes$gen_truncating),")")), 
          col=c("orange", "green", "purple", "blue", "red", "Black"), cex=1, lty=1, lwd=2)
 }
 
 candidateGenes  <- function(cancer_type ) {
   
   dat = read.csv(paste0("../apsic_shiny/apsic_pvalues/", cancer_type, "/", cancer_type, 
-                        "-missense-low.csv"), stringsAsFactors = FALSE)
+                        "-mutation-oncogene.csv"), stringsAsFactors = FALSE)
   
-  nrOfCelllines = dat[1, ]$freq_mut + dat[1,]$freq_wt
+  nrOfCelllines = dat[1, ]$X.wt + dat[1,]$X.mut
   minNrOfCelllines=ceiling(nrOfCelllines/100)
   
   gene_set1 = gene_set2 = ""
   # non-genetic high : potential tumor suppressor
   fname = paste0("../apsic_shiny/apsic_pvalues/", cancer_type, "/", cancer_type, 
-                 "-non-genetic-high.csv")
+                 "-non-genetic-tumor_suppressor.csv")
   if(file.exists(fname)) {
-    dat = read.csv(fname, stringsAsFactors = FALSE)
-    n = sum(dat$freq_wt > minNrOfCelllines)
-    gene_set1 = dat[which(dat$pvalue_wt < 1/n & dat$tumor_expressed_less <0.05), "gene"]
+    dat = read.csv(fname, stringsAsFactors = FALSE, row.names = 1)
+    n = sum(dat$X.wt > minNrOfCelllines)
+    # indexes = which(dat$p_adj < adj_alpha & dat$tcga_pvalue < 0.05 & dat$tcga_tumor_vs_normal == "down")
+    indexes = which(dat$pvalue < min(1/n, 0.05) & dat$tcga_pvalue < 0.05 & dat$tcga_tumor_vs_normal == "down")
+    gene_set1 = row.names(dat)[indexes]
   }
   
   # non-genetic low
   fname = paste0("../apsic_shiny/apsic_pvalues/", cancer_type, "/", cancer_type, 
-                 "-non-genetic-low.csv")
+                 "-non-genetic-oncogene.csv")
   if(file.exists(fname)) {
-    dat = read.csv( fname, stringsAsFactors = FALSE)
-    n = sum(dat$freq_wt > minNrOfCelllines)
-    gene_set2 = dat[which(dat$pvalue_wt < 1/n & dat$tumor_expressed_more <0.05), "gene"]
+    dat = read.csv( fname, stringsAsFactors = FALSE, row.names = 1)
+    n = sum(dat$X.wt > minNrOfCelllines)
+    # indexes = which(dat$p_adj < adj_alpha & dat$tcga_pvalue < 0.05 & dat$tcga_tumor_vs_normal == "up")
+    indexes = which(dat$pvalue < min(1/n, 0.05) & dat$tcga_pvalue < 0.05 & dat$tcga_tumor_vs_normal == "up")
+    gene_set2 = row.names(dat)[indexes]
   }
   
   # missense
   dat = read.csv(paste0("../apsic_shiny/apsic_pvalues/", cancer_type, "/", cancer_type, 
-                        "-missense-low.csv"), stringsAsFactors = FALSE)
-  n = sum(dat$freq_mut > minNrOfCelllines)
-  gene_set3 = dat[which(dat$pvalue_mut < 1/n & dat$pvalue_wt > 0.05), "gene"]
+                        "-mutation-oncogene.csv"), stringsAsFactors = FALSE, row.names = 1)
+  # indexes = which(dat$p_adj < adj_alpha)
+  n = sum(dat$X.mut > minNrOfCelllines)
+  indexes = which(dat$pvalue < min(1/n, 0.05))
+  gene_set3 = row.names(dat)[indexes]
   
   # amplification
   dat = read.csv(paste0("../apsic_shiny/apsic_pvalues/", cancer_type, "/", cancer_type, 
-                        "-amplification-low.csv"), stringsAsFactors = FALSE)
-  n = sum(dat$freq_mut > minNrOfCelllines)
-  gene_set4 = dat[which(dat$pvalue_mut < 1/n & dat$pvalue_wt > 0.05), "gene"]
-  
+                        "-amplification-oncogene.csv"), stringsAsFactors = FALSE, row.names = 1)
+  # indexes = which(dat$p_adj < adj_alpha)
+  n = sum(dat$X.mut > minNrOfCelllines)
+  indexes = which(dat$pvalue < min(1/n, 0.05) )
+  gene_set4 = row.names(dat)[indexes]
   
   # truncating
   dat = read.csv(paste0("../apsic_shiny/apsic_pvalues/", cancer_type, "/", cancer_type, 
-                        "-truncating-high.csv"), stringsAsFactors = FALSE)
-  n = sum(dat$freq_mut > minNrOfCelllines)
-  gene_set5 = dat[which(dat$pvalue_mut < 1/n & dat$pvalue_wt > 0.05), "gene"]
-  
+                        "-mutation-tumor_suppressor.csv"), stringsAsFactors = FALSE, row.names = 1)
+  # indexes = which(dat$p_adj < adj_alpha)
+  n = sum(dat$X.mut > minNrOfCelllines)
+  indexes = which(dat$pvalue < min(1/n, 0.05))
+  gene_set5 = row.names(dat)[indexes]
   
   list(nongen_high=gene_set1, nongen_low=gene_set2, gen_missense=gene_set3, 
        gen_amplification=gene_set4, gen_truncating=gene_set5)
 }
 
-#################################################################################################################################################
+
 
 geneAnnot = read.table("Homo_sapiens.GRCh38.p10_genes.csv", sep='\t', stringsAsFactors = FALSE)
 
 output_folder =  "figures/fig3/"
 dir.create(output_folder, showWarnings = FALSE, recursive = TRUE)
 file_names = list.files("../apsic_shiny/apsic_pvalues/")
-file_names <- file_names[-21]
+file_names <- file_names[-which(file_names == "Pan_cancer")]
+
+nr_elem_candidate_genes <- function(candidGenes) {
+  return(length(candidGenes$nongen_high) + length(candidGenes$nongen_low) + length(candidGenes$gen_missense) +
+           length(candidGenes$gen_amplification) + length(candidGenes$gen_truncating))
+}
 
 for(fname in file_names){
   candidGenes = candidateGenes(fname)
-  gene = c(candidGenes$nongen_low,candidGenes$nongen_high,candidGenes$gen_missense,candidGenes$gen_amplification,candidGenes$gen_truncating)
-  candidGenes <- annotateGene(candidGenes)
-  pdf(paste0(output_folder, fname, ".pdf"), 10, 15)
-  plotInChromosomeContext(candidGenes, geneAnnot, fname)
-  dev.off()
+  if(nr_elem_candidate_genes(candidGenes) > 0)  {
+    gene = c(candidGenes$nongen_low,candidGenes$nongen_high,candidGenes$gen_missense,candidGenes$gen_amplification,candidGenes$gen_truncating)
+    candidGenes <- annotateGene(candidGenes)
+    if(any(candidGenes$color == "black")) # means multiple
+      print(paste(fname))
+    pdf(paste0(output_folder, fname, ".pdf"), 10, 15)
+    plotInChromosomeContext(candidGenes, geneAnnot, fname)
+    dev.off()
+  }
 }
-
-# pdf(paste0(output_folder, "All_cancers", ".pdf"), 10, 15,  onefile=TRUE)
-# for(fname in file_names) {
-#   candidGenes = candidateGenes(fname)
-#   plotInChromosomeContext(candidGenes, geneAnnot, fname)
-# }
-
-# dev.off()
