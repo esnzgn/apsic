@@ -4,7 +4,7 @@ library(reshape2)
 library(viridis)
 source("../apsic_shiny/common.r")
 source("../apsic_shiny/waterfall_plot_methods.r")
-source("plot_functions_for_profiles.r")
+source("scripts/plot_functions_for_profiles.r")
 
 # load viability data
 load("../apsic_shiny/cancerData.RData")
@@ -55,6 +55,8 @@ waterfallForGene(cancerData, gene = gene, title="", rank=TRUE, legenedPos="botto
                  cols=NULL, type="only_missense", sig_alpha = NA)
 dev.off()
 
+
+
 ############## Figure 1-d  -- TP53
 pdf(paste0(fig_folder,"fig-1-d_wt_tp53.pdf"), 5, 4)
 gene = "TP53"
@@ -99,3 +101,23 @@ dev.off()
 
 
 
+selectCelllinesWithIndexes <- function(panCancerData, indexes) {
+  panCancerData$viabilities = panCancerData$viabilities[, indexes, drop=FALSE]
+  panCancerData$mutations_all = panCancerData$mutations_all[, indexes, drop=FALSE]
+  panCancerData$silentMutations = panCancerData$silentMutations[, indexes, drop=FALSE]
+  panCancerData$missenseMutations = panCancerData$missenseMutations[, indexes, drop=FALSE]
+  panCancerData$truncatingMutations = panCancerData$truncatingMutations[, indexes, drop=FALSE]
+  
+  panCancerData$copyNumbers = panCancerData$copyNumbers[, indexes, drop=FALSE]
+  # panCancerData$exprData = panCancerData$exprData[, indexes]
+  panCancerData
+}
+
+gene = "KRAS"
+indexes = which(cancerData$truncatingMutations[gene, ] ==0)
+subCancerData = selectCelllinesWithIndexes(cancerData, indexes) 
+
+pdf(paste0(fig_folder, "fig-1-kras_missense_wt.pdf"), 8, 6)
+waterfallForGene(subCancerData, gene = gene, title="", rank=TRUE, legenedPos="bottomleft", 
+                 cols=NULL, type="all", sig_alpha = NA)
+dev.off()

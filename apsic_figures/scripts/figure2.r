@@ -1,6 +1,6 @@
 rm(list=ls())
 library(pvclust)
-source("common_functions.r")
+source("scripts/common_functions.r")
 
 fig_folder = "figures/fig2/"
 dir.create(fig_folder, recursive = T, showWarnings = FALSE)
