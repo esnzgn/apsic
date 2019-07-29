@@ -45,10 +45,10 @@ load("ordered_cancers.RData")
 fig_folder = "figures/fig2/"
 feature_type = "non-genetic-tumor_suppressor"
 pvalues = prepareNongeneticPvalueData(feature_type, cancers)
-topGenes = selectImportantNongeneticGenes(feature_type, cancers, 5, TRUE)
+topGenes = selectImportantNongeneticGenes(feature_type, cancers, 5, FALSE)
 pvalues = pvalues[topGenes, ]
 
-pdf(paste0(fig_folder, feature_type, ".pdf"), 8, 12)
+pdf(paste0(fig_folder, feature_type, ".pdf"), 8, 14)
 plotHeatmap(-log10(pvalues) )
 dev.off()
 
@@ -59,10 +59,10 @@ dev.off()
 
 feature_type = "non-genetic-oncogene"
 pvalues = prepareNongeneticPvalueData(feature_type, cancers)
-topGenes = selectImportantNongeneticGenes(feature_type, cancers, 5, TRUE)
+topGenes = selectImportantNongeneticGenes(feature_type, cancers, 5, FALSE)
 pvalues = pvalues[topGenes, ]
 
-pdf(paste0(fig_folder, feature_type, ".pdf"), 8, 12)
+pdf(paste0(fig_folder, feature_type, ".pdf"), 8, 14)
 plotHeatmap(-log10(pvalues) )
 dev.off()
 

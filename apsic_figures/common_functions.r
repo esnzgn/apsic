@@ -70,31 +70,41 @@ plot_cluster=function(data, var_cluster, palette)
           legend.box = "horizontal") + 
     scale_colour_brewer(palette = palette) 
 }
-
+#dat = -log10(pvalues)
 plotHeatmap <- function(dat) {
   dat = dat[rev(rownames(dat)),]
-  
+  orgGeneNames = rownames(dat)
   dat = data.frame(dat)
-  dat$gene = rownames(dat)
+  geneNames = rownames(dat) 
+  dat$gene = geneNames
+  names(orgGeneNames) = geneNames
+  
+  group = rev(rep(1:(nrow(dat)/5), each=5))
+  names(group) = geneNames
   
   dat.m = melt(dat, id.vars = "gene")
   names(dat.m) <- c("gene", "type", "pvalue")
-  
-  mylevels <- rownames(dat)
+
+  mylevels <- geneNames
   dat.m$gene <- factor(dat.m$gene,levels=mylevels)
   
   dat.m$pvalue[dat.m$pvalue > 20] = 20
   
+  dat.m$group = group[dat.m$gene]
+  orgGenes  = orgGeneNames[dat.m$gene]
+
   handle = ggplot(dat.m, aes(type, gene),font=3) +
-    geom_tile(aes(fill = pvalue), color = "white") + 
+    facet_grid(group~., scales = "free_y") +
+    geom_tile(aes(fill = pvalue), color = "gray") + 
     scale_fill_gradientn(name = expression(-log[10](p-value)), values=rescale(c(0, log10(0.05), 3, 5, 10, 20)), colours= c( "white",  "white",  "orange", "red1", "red2", "black")) +
+    scale_y_discrete(labels=orgGenes) +
     ylab("") +
     xlab("") +
     theme_bw()+
     theme(plot.title = element_text(size=16),
           axis.title=element_text(size=14,face="bold"),
-          axis.text.y = element_text(size=7, face="italic"),
-          axis.text.x = element_text(angle = 45, hjust = 1),
+          axis.text.y = element_text(size=6, face="italic"),
+          axis.text.x = element_text(size=6, angle = 45, hjust = 1),
           legend.position = "right")
 
   print(handle)
