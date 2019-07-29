@@ -30,6 +30,7 @@ id =1:length(value)
 
 data = data.frame(id=id, individual = individual, value = value)
 
+barplot(data)
 
 # ----- This section prepare a dataframe for labels ---- #
 # Get the name and the y position of each label
