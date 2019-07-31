@@ -112,10 +112,7 @@ shinyServer(function(input, output,session){
       load(paste0("tcga/", tmp, ".RData"))
       boxplot_gene(tcga_data, input$gene)
     }
-    ##########################################################################################################################################
-    ##########################################################################################################################################
-    ##########################################################################################################################################
-    ##########################################################################################################################################
+   
     if (input$cancer =="pan cancer"){
       return(NULL)
     }
@@ -189,15 +186,14 @@ shinyServer(function(input, output,session){
   getTCGAPValue <- function(gene, cancer) {
     tmp = str_replace(cancer, "[: ]", "_")
     # all p-value files have the same TCGA p-values 
-    A <- paste0("apsic_pvalues/", tmp,"/", tmp, "-amplification-low.csv")
+    A <- paste0("apsic_pvalues/", tmp,"/", tmp, "-amplification-oncogene.csv")
     if(file.exists(A)) {
       dat = read.csv(A, row.names = 1)
       pvalue = NA
-      if("tumor_expressed_less" %in% colnames(dat)) {
-        pvalue_less = dat[gene, "tumor_expressed_less"]
-        pvalue_more = dat[gene, "tumor_expressed_more"]
-        if(!is.na(pvalue_less)) 
-          pvalue = round(-log10(min(pvalue_less, pvalue_more) ),2)
+      if("tcga_pvalue" %in% colnames(dat)) {
+        tcga_pvalue = dat[gene, "tcga_pvalue"]
+        if(!is.na(tcga_pvalue)) 
+          pvalue = round(-log10(tcga_pvalue),2)
       }
       return(list(pvalue = pvalue))
     }
@@ -209,32 +205,32 @@ shinyServer(function(input, output,session){
     data = data.frame(matrix(ncol=2, nrow=3))
     colnames(data) = c("Type", "-log10(p-value)")
     
-    p_value = getPValue(input$gene, input$cancer, "amplification-low",  "pvalue_mut") 
+    p_value = getPValue(input$gene, input$cancer, "amplification-oncogene",  "pvalue") 
     if(is.na(p_value))
       p_value = "-"
     
     data[1, ] = c("Amplification oncogene", p_value)
     
-    p_value = getPValue(input$gene, input$cancer, "missense-low",  "pvalue_mut")
+    p_value = getPValue(input$gene, input$cancer, "mutation-oncogene",  "pvalue")
     if(is.na(p_value))
       p_value = "-"
     
     data[2, ] = c("Mutation oncogene", p_value) 
     
-    p_value = getPValue(input$gene, input$cancer, "truncating-high",  "pvalue_mut")
+    p_value = getPValue(input$gene, input$cancer, "mutation-tumor_suppressor",  "pvalue")
     if(is.na(p_value))
       p_value = "-"
     
     data[3, ] = c("Mutation tumor suppressor", p_value) 
     
     if (input$cancer != "Pan cancer"){
-      p_value = getPValue(input$gene, input$cancer, "non-genetic-low",  "pvalue_wt")
+      p_value = getPValue(input$gene, input$cancer, "non-genetic-oncogene",  "pvalue")
       if(is.na(p_value))
         p_value = "-"
       
       data[4, ] = c("Non-genetic oncogene", p_value)    
       
-      p_value = getPValue(input$gene, input$cancer, "non-genetic-high",  "pvalue_wt")
+      p_value = getPValue(input$gene, input$cancer, "non-genetic-tumor_suppressor",  "pvalue")
       if(is.na(p_value))
         p_value = "-"
       
