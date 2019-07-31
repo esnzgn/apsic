@@ -1,6 +1,6 @@
 rm(list=ls())
 library(pvclust)
-source("common_functions.r")
+source("scripts/common_functions.r")
 
 fig_folder = "figures/fig2/"
 dir.create(fig_folder, recursive = T, showWarnings = FALSE)
@@ -25,8 +25,8 @@ dat[which(is.na(dat))] = 1.0
 result = pvclust(dat, method.dist="cor", method.hclust="ward.D2", nboot=1000)
 
 pdf(paste0(fig_folder, "types-cluster.pdf"), width=10, height=8)
-plot(result)
-pvrect(result, alpha=0.9)
+plot(result, main='', print.num=FALSE, xlab='', sub='')
+pvrect(result, alpha=0.85)
 dev.off()
 
 # now we reorder subtypes according to the hierarchical clustering
@@ -39,7 +39,7 @@ save(cancers, file="ordered_cancers.RData")
 ################################## heatmap for 5 top genes per cancer ###############################
 #####################################################################################################
 rm(list=ls())
-source("common_functions.r")
+source("scripts/common_functions.r")
 load("ordered_cancers.RData")
 
 fig_folder = "figures/fig2/"

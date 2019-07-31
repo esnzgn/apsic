@@ -4,7 +4,7 @@ library(reshape2)
 library(viridis)
 source("../apsic_shiny/common.r")
 source("../apsic_shiny/waterfall_plot_methods.r")
-source("plot_functions_for_profiles.r")
+source("scripts/plot_functions_for_profiles.r")
 
 # load viability data
 load("../apsic_shiny/cancerData.RData")
