@@ -24,7 +24,7 @@ dat[which(is.na(dat))] = 1.0
 # clustering with 10000 bootstraps 
 result = pvclust(dat, method.dist="cor", method.hclust="ward.D2", nboot=1000)
 
-pdf(paste0(fig_folder, "types-cluster.pdf"), width=10, height=8)
+pdf(paste0(fig_folder, "types-cluster_tumor_suppressor.pdf"), width=10, height=8)
 plot(result, main='', print.num=FALSE, xlab='', sub='')
 pvrect(result, alpha=0.85)
 dev.off()

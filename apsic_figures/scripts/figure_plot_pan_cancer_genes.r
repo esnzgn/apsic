@@ -33,7 +33,6 @@ allPvalues = c(pMis, pAmp, pTru)
 allPvalues = allPvalues[which(!is.na(allPvalues))]
 
 pdf("figures/pan-cancer-genes.pdf", width=8, height=6)
-
 den =density(allPvalues) 
 plot(den, axes=F, xlab="-log10(p)", main="")
 axis(side=1, at=c(0,1, 3, 5, 7))

@@ -121,3 +121,21 @@ pdf(paste0(fig_folder, "fig-1-kras_missense_wt.pdf"), 8, 6)
 waterfallForGene(subCancerData, gene = gene, title="", rank=TRUE, legenedPos="bottomleft", 
                  cols=NULL, type="all", sig_alpha = NA)
 dev.off()
+
+
+selectedData = selectCelllines(cancerData, "Breast:Carcinoma", tableS2File="../apsic_shiny/TableS2.csv")
+gene = "LRRC4B"
+pdf(paste0(fig_folder,"fig-1-lrrc4b.pdf"), 10, 6)
+waterfallForGene(selectedData, gene = gene, title="", rank=TRUE, legenedPos="bottomleft", 
+                 cols=NULL, type="all", sig_alpha = NA)
+dev.off()
+
+
+
+############## Figure 1-d  -- KRAS
+pdf(paste0(fig_folder,"fig-1-kras.pdf"), 10, 6)
+gene = "KRAS"
+waterfallForGene_CNA(cancerData, gene = gene, title="", rank=TRUE, legenedPos="bottomleft", 
+                 cols=NULL, type="all", sig_alpha = NA)
+
+dev.off()
