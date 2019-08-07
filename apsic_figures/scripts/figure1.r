@@ -132,10 +132,30 @@ dev.off()
 
 
 
-############## Figure 1-d  -- KRAS
-pdf(paste0(fig_folder,"fig-1-kras.pdf"), 10, 6)
+############## Figure 2-b  -- BRAF
+pdf(paste0(fig_folder,"fig-2-braf.pdf"), 10, 6)
+gene = "BRAF"
+waterfallForGene(cancerData, gene = gene, title="", rank=TRUE, legenedPos="bottomleft", 
+                 cols=NULL, type="all", sig_alpha = NA)
+
+dev.off()
+
+
+
+############## Figure 2-c  -- KRAS
+pdf(paste0(fig_folder,"fig-2-kras.pdf"), 10, 6)
 gene = "KRAS"
 waterfallForGene_CNA(cancerData, gene = gene, title="", rank=TRUE, legenedPos="bottomleft", 
+                 cols=NULL, type="all", sig_alpha = NA)
+
+dev.off()
+
+
+
+############## Figure 2-d  -- ARID1A
+pdf(paste0(fig_folder,"fig-2-arid1a.pdf"), 10, 6)
+gene = "ARID1A"
+waterfallForGene(cancerData, gene = gene, title="", rank=TRUE, legenedPos="bottomleft", 
                  cols=NULL, type="all", sig_alpha = NA)
 
 dev.off()
