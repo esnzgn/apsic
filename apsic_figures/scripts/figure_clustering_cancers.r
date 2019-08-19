@@ -17,21 +17,36 @@ plotClustersOfCancers <- function(pvalues, fig_folder, feature_name, nrGenes=500
   result = pvclust(dat, method.dist="cor", method.hclust="ward.D2", nboot=nboot)
   
   pdf(paste0(fig_folder, "pvclust_90_", feature_name, ".pdf"), width=10, height=8)
-  plot(result, main='', print.num=FALSE, xlab='', sub='')
+  plot(result, hang=-1, main='', print.num=FALSE, xlab='', sub='')
   pvrect(result, alpha=0.90)
   dev.off()
   
-  
+  as.dendrogram(result$hclust)
+  pdf(paste0(fig_folder, "dendrogram_horiz_90_", feature_name, ".pdf"), width=3, height=20) 
+  plot(rev(as.dendrogram(result$hclust)), type = "rectangle", ylab = "Height", horiz = TRUE, leaflab="none")
+  dev.off()
+
   pdf(paste0(fig_folder, "pvclust_85_", feature_name, ".pdf"), width=10, height=8)
-  plot(result, main='', print.num=FALSE, xlab='', sub='')
-  pvrect(result, alpha=0.85)
+  plot(result, hang=-1, main='', print.num=FALSE, xlab='', sub='')
+  pvrect(result,  alpha=0.85)
   dev.off()
   
+  pdf(paste0(fig_folder, "dendrogram_horiz_85_", feature_name, ".pdf"), width=3, height=20) 
+  plot(rev(as.dendrogram(result$hclust)), type = "rectangle", ylab = "Height", horiz = TRUE, leaflab="none")  
+  dev.off()
+
   pdf(paste0(fig_folder, "pvclust_80_", feature_name, ".pdf"), width=10, height=8)
-  plot(result, main='', print.num=FALSE, xlab='', sub='')
+  plot(result, main='', hang=-1, print.num=FALSE, xlab='', sub='')
   pvrect(result, alpha=0.80)
   dev.off()
   
+  pdf(paste0(fig_folder, "dendrogram_horiz_80_", feature_name, ".pdf"), width=3, height=20) 
+  plot(rev(as.dendrogram(result$hclust)), type = "rectangle", ylab = "Height", horiz = TRUE, leaflab="none")
+  dev.off()
+
+  pdf(paste0(fig_folder, "dendrogram_horiz_80_", feature_name, "_with_labs.pdf"), width=3, height=20) 
+  plot(rev(as.dendrogram(result$hclust)), type = "rectangle", ylab = "Height", horiz = TRUE)
+  dev.off()
   
   # now we reorder subtypes according to the hierarchical clustering
   clusters = hclust(get_dist(t(dat), method = "pearson"), method= "ward.D2")
@@ -39,8 +54,6 @@ plotClustersOfCancers <- function(pvalues, fig_folder, feature_name, nrGenes=500
   cancers = clusters$labels[clusters$order]
   save(cancers, file=paste0(fig_folder2, "ordered_cancers_",feature_name, ".RData"))
 }
-
-
 
 fig_folder2 = "figures/figS1/"
 dir.create(fig_folder2, recursive = T, showWarnings = FALSE)
@@ -53,7 +66,7 @@ set.seed(10)
 pvalues = prepareNongeneticPvalueData("non-genetic-tumor_suppressor", cancers)
 plotClustersOfCancers(pvalues, fig_folder2, "tumor_suppressor", nboot=10000)
 
+
 set.seed(10)
 pvalues = prepareNongeneticPvalueData("non-genetic-oncogene", cancers)
 plotClustersOfCancers(pvalues, fig_folder2, "oncongenes", nboot=10000)
-
